@@ -42,7 +42,7 @@ public class ProductListActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("LoggedIn", false);
         editor.apply();
-        
+
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
         startActivity(intent);
     }

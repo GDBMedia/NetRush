@@ -25,11 +25,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         Log.v("Test", pref.getString("Email", "fail"));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginButton.setOnClickListener(this);
-//        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+
         if (pref.getBoolean("LoggedIn", false)) {
             Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
             startActivity(intent);

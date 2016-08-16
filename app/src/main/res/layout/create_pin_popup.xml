@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#c88d8c8c">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create a pin to begin ordering"
+        android:id="@+id/createPinText"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#eaeaea"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/pinInput"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_marginLeft="130dp"
+        android:layout_marginRight="130dp"
+        android:hint="Enter Pin" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/confirmPinInput"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_marginLeft="130dp"
+        android:layout_marginRight="130dp"
+        android:hint="Confirm Pin" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/createPinButton"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>
