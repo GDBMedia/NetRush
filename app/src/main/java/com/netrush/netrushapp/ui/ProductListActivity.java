@@ -32,15 +32,18 @@ public class ProductListActivity extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.logout) {
-            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("LoggedIn", false);
-            editor.apply();
-
-            Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
-            startActivity(intent);
-//            return true;
+            logout();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("LoggedIn", false);
+        editor.apply();
+        
+        Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }
