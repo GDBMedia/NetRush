@@ -66,6 +66,7 @@ import com.amazon.identity.auth.device.shared.APIListener;
 import com.amazon.identity.auth.device.AuthError;
 import com.netrush.netrushapp.R;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.SpannableString;
@@ -321,11 +322,13 @@ public class LoginActivity extends Activity{
      */
     private void setLoggingInState(final boolean loggingIn){
         if(loggingIn){
-            mLoginButton.setVisibility(Button.GONE);
-            setLoggedInButtonsVisibility(Button.GONE);
-            mLogInProgress.setVisibility(ProgressBar.VISIBLE);
-            mReturnToApp.setVisibility(TextView.VISIBLE);
-            mProfileText.setVisibility(TextView.GONE);
+            Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
+            startActivity(intent);
+//            mLoginButton.setVisibility(Button.GONE);
+//            setLoggedInButtonsVisibility(Button.GONE);
+//            mLogInProgress.setVisibility(ProgressBar.VISIBLE);
+//            mReturnToApp.setVisibility(TextView.VISIBLE);
+//            mProfileText.setVisibility(TextView.GONE);
         }
         else{
             if(mIsLoggedIn){
