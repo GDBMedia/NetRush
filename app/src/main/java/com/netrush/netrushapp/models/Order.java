@@ -10,15 +10,17 @@ public class Order {
     private String asin;
     private String quantity;
     private double unitprice;
+    private String imageUrl;
 
     public Order() {}
 
-    public Order(String date, String title, String asin, String quantity, double unitprice) {
+    public Order(String date, String title, String asin, String quantity, double unitprice, String imageUrl) {
         this.date = date;
         this.title = title;
         this.asin = asin;
         this.quantity = quantity;
         this.unitprice = unitprice;
+        this.imageUrl = imageUrl;
     }
 
     public String getDate() {
@@ -58,6 +60,13 @@ public class Order {
 
     public void setUnitprice(double unitprice) {
         this.unitprice = unitprice;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 

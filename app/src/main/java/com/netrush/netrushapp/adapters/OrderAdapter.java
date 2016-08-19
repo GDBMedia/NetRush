@@ -1,25 +1,47 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
+import com.netrush.netrushapp.services.AmazonService;
+import com.netrush.netrushapp.ui.ProductListActivity;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by Garrett on 8/17/2016.
  */
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
+    public final String TAG = this.getClass().getSimpleName();
+    public static int PRETTY_PRINT_INDENT_FACTOR = 4;
+    private int itemNum = 1;
+//    public static String CARTID = "null";
+//    public static String HMAC = "null";
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
 
@@ -46,10 +68,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         return mOrderArrayList.size();
     }
 
-    public class OrderViewHolder extends RecyclerView.ViewHolder{
+    public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @Bind(R.id.card_view) CardView cv;
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
+        @Bind(R.id.productimg) ImageView mImage;
         private Context mContext;
 
         public OrderViewHolder(View itemView) {
@@ -57,9 +80,45 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             ButterKnife.bind(this, itemView);
 
             mContext = itemView.getContext();
+            cv.setOnClickListener(this);
         }
 
         public void bindOrder(Order order) {
+//            final AmazonService amazonService = new AmazonService();
+//            int itemPosition = getLayoutPosition();
+//            amazonService.getImage(mOrderArrayList.get(itemPosition).getAsin(), new Callback() {
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    String imageUrl = amazonService.proccessImageUrl(response);
+//                    if(imageUrl.length() > 0){
+//                        Picasso.with(mContext).load(imageUrl).into(new Target() {
+//                            @Override
+//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                Log.i(TAG, "The image was obtained correctly");
+//                                mImage.setImageBitmap(bitmap);
+//                            }
+//
+//                            @Override
+//                            public void onBitmapFailed(Drawable errorDrawable) {
+//                                Log.e(TAG, "The image was not obtained");
+//                            }
+//
+//                            @Override
+//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                Log.d(TAG, "Getting ready to get the image");
+//                                //Here you should place a loading gif in the ImageView to
+//                                //while image is being obtained.
+//                            }
+//                        });
+//                    }
+//
+//                }
+//            });
             String title = order.getTitle();
             if(order.getTitle().length() > 30){
                 title = order.getTitle().substring(0, 30) + mContext.getString(R.string.elip);
@@ -69,5 +128,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         }
 
+        @Override
+        public void onClick(View view) {
+            int itemPosition = getLayoutPosition();
+            String itemKey = "Item." + itemNum + ".ASIN";
+            String quantKey = "Item." + itemNum + ".Quantity";
+            ProductListActivity.setButtonVisable();
+            itemNum++;
+            ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
+            ProductListActivity.mProducts.put(quantKey, "1");
+
+
+        }
     }
 }

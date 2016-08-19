@@ -11,6 +11,16 @@
         android:id="@+id/orders"
         />
 
+    <Button
+        android:text="Checkout"
+        android:visibility="gone"
+        android:id="@+id/checkoutButton"
+        android:background="@color/colorAccent"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
+
 
 
 </RelativeLayout>
