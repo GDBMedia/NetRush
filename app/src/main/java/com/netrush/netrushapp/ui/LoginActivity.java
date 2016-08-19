@@ -102,13 +102,9 @@ public class LoginActivity extends Activity{
 
     private static final String[] APP_SCOPES= {"profile"};
 
-//    private TextView mProfileText;
     private ImageButton mLoginButton;
-    private TextView mLogoutTextView;
     private AmazonAuthorizationManager mAuthManager;
-//    private ProgressBar mLogInProgress;
     private boolean mIsLoggedIn;
-//    private TextView mReturnToApp;
 
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -136,7 +132,9 @@ public class LoginActivity extends Activity{
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         mLoginButton = (ImageButton) findViewById(R.id.loginButton);
         if (pref.getBoolean("LoggedIn", true)) {
-            setLoggingInState(true);
+//            setLoggingInState(true);
+            Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
+            startActivity(intent);
         }
         mLoginButton.setOnClickListener(new OnClickListener() {
 
@@ -150,69 +148,6 @@ public class LoginActivity extends Activity{
                 mAuthManager.authorize(APP_SCOPES, Bundle.EMPTY, new AuthListener());
             }
         });
-//        mLogoutTextView = (TextView) findViewById(R.id.logout);
-//        String logoutText = "Logout";
-//        SpannableString underlinedLogoutText = new SpannableString(logoutText);
-//        underlinedLogoutText.setSpan(new UnderlineSpan(), 0, logoutText.length(), 0);
-//        mLogoutTextView.setText(underlinedLogoutText);
-//        mLogoutTextView.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                mAuthManager.clearAuthorizationState(new APIListener() {
-//                    @Override
-//                    public void onSuccess(Bundle results) {
-//                        runOnUiThread(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                setLoggedOutState();
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onError(AuthError authError) {
-//                        Log.e(TAG, "Error clearing authorization state.", authError);
-//                    }
-//                });
-//            }
-//        });
-
-//        mLogInProgress = (ProgressBar) findViewById(R.id.log_in_progress);
-
-//        mReturnToApp = (TextView)findViewById(R.id.return_to_app);
-
-//        String returnToAppText = "Return to App";
-//        SpannableString underlinedReturnToAppText = new SpannableString(returnToAppText);
-//        underlinedReturnToAppText.setSpan(new UnderlineSpan(), 0, returnToAppText.length(), 0);
-//        mReturnToApp.setText(underlinedReturnToAppText);
-//        mReturnToApp.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuthManager.clearAuthorizationState(new APIListener() {
-//                    @Override
-//                    public void onSuccess(Bundle results) {
-//                        runOnUiThread(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                if ( mAuthManager != null )
-//                                {
-//                                    // if user clicks on Return to App link, check the login state.
-//                                    updateLoginState();
-//                                }
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onError(AuthError authError) {
-//                        Log.e(TAG, "Error clearing authorization state.", authError);
-//                    }
-//                });
-//            }
-//        });
     }
 
     /**
@@ -274,16 +209,6 @@ public class LoginActivity extends Activity{
                 }
             });
         }
-
-    }
-
-    /**
-     * Sets the text in the mProfileText {@link TextView} to the value of the provided String.
-     * @param profileInfo the String with which to update the {@link TextView}.
-     */
-    private void updateProfileView(String profileInfo) {
-        Log.d(TAG, "Updating profile view");
-//        mProfileText.setText(profileInfo);
     }
 
     /**
@@ -291,7 +216,6 @@ public class LoginActivity extends Activity{
      */
     private void resetProfileView(){
         setLoggingInState(false);
-//        mProfileText.setText(getString(R.string.default_message));
     }
 
     /**
@@ -299,7 +223,6 @@ public class LoginActivity extends Activity{
      */
     private void setLoggedOutState(){
         mLoginButton.setVisibility(Button.VISIBLE);
-//        setLoggedInButtonsVisibility(Button.GONE);
         mIsLoggedIn = false;
         resetProfileView();
     }
@@ -308,46 +231,24 @@ public class LoginActivity extends Activity{
      * Sets the state of the application to reflect that the user is currently authorized.
      */
     private void setLoggedInState(){
-//        mLoginButton.setVisibility(Button.GONE);
-//        setLoggedInButtonsVisibility(Button.VISIBLE);
         mIsLoggedIn = true;
         setLoggingInState(false);
     }
-
-    /**
-     * Changes the visibility for both of the buttons that are available during the logged in state
-     * @param visibility the visibility to which the buttons should be set
-     */
-//    private void setLoggedInButtonsVisibility(int visibility){
-//        mLogoutTextView.setVisibility(visibility);
-//    }
 
     /**
      * Turns on/off display elements which indicate that the user is currently in the process of logging in
      * @param loggingIn whether or not the user is currently in the process of logging in
      */
     private void setLoggingInState(final boolean loggingIn){
-        if(loggingIn){
-            Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
-            startActivity(intent);
-//            mLoginButton.setVisibility(Button.GONE);
-//            setLoggedInButtonsVisibility(Button.GONE);
-//            mLogInProgress.setVisibility(ProgressBar.VISIBLE);
-//            mReturnToApp.setVisibility(TextView.VISIBLE);
-//            mProfileText.setVisibility(TextView.GONE);
-        }
-        else{
             if(mIsLoggedIn){
-//                setLoggedInButtonsVisibility(Button.VISIBLE);
+                Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
+                startActivity(intent);
             }
             else{
                 mLoginButton.setVisibility(Button.VISIBLE);
             }
-//            mReturnToApp.setVisibility(TextView.GONE);
-//            mLogInProgress.setVisibility(ProgressBar.GONE);
-//            mProfileText.setVisibility(TextView.VISIBLE);
         }
-    }
+//    }
 
     private void showAuthToast(String authToastMessage){
         Toast authToast = Toast.makeText(getApplicationContext(), authToastMessage, Toast.LENGTH_LONG);
@@ -433,7 +334,6 @@ public class LoginActivity extends Activity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateProfileView(profile);
                         setLoggedInState();
                     }
                 });
@@ -449,7 +349,6 @@ public class LoginActivity extends Activity{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updateProfileView("ERROR: Request for profile information failed.\nPlease log out, and then try logging in again.");
                     setLoggingInState(false);
                 }
             });
