@@ -67,6 +67,7 @@ import com.amazon.identity.auth.device.AuthError;
 import com.netrush.netrushapp.R;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.SpannableString;
@@ -101,13 +102,13 @@ public class LoginActivity extends Activity{
 
     private static final String[] APP_SCOPES= {"profile"};
 
-    private TextView mProfileText;
+//    private TextView mProfileText;
     private ImageButton mLoginButton;
     private TextView mLogoutTextView;
     private AmazonAuthorizationManager mAuthManager;
-    private ProgressBar mLogInProgress;
+//    private ProgressBar mLogInProgress;
     private boolean mIsLoggedIn;
-    private TextView mReturnToApp;
+//    private TextView mReturnToApp;
 
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -132,81 +133,86 @@ public class LoginActivity extends Activity{
      * Initializes all of the UI elements in the activity
      */
     private void initializeUI() {
-        mProfileText = (TextView) findViewById(R.id.profile_info);
-
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         mLoginButton = (ImageButton) findViewById(R.id.loginButton);
+        if (pref.getBoolean("LoggedIn", true)) {
+            setLoggingInState(true);
+        }
         mLoginButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("LoggedIn", true);
+                editor.apply();
                 setLoggingInState(true);
                 mAuthManager.authorize(APP_SCOPES, Bundle.EMPTY, new AuthListener());
             }
         });
+//        mLogoutTextView = (TextView) findViewById(R.id.logout);
+//        String logoutText = "Logout";
+//        SpannableString underlinedLogoutText = new SpannableString(logoutText);
+//        underlinedLogoutText.setSpan(new UnderlineSpan(), 0, logoutText.length(), 0);
+//        mLogoutTextView.setText(underlinedLogoutText);
+//        mLogoutTextView.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                mAuthManager.clearAuthorizationState(new APIListener() {
+//                    @Override
+//                    public void onSuccess(Bundle results) {
+//                        runOnUiThread(new Runnable() {
+//
+//                            @Override
+//                            public void run() {
+//                                setLoggedOutState();
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onError(AuthError authError) {
+//                        Log.e(TAG, "Error clearing authorization state.", authError);
+//                    }
+//                });
+//            }
+//        });
 
-        mLogoutTextView = (TextView) findViewById(R.id.logout);
-        String logoutText = "Logout";
-        SpannableString underlinedLogoutText = new SpannableString(logoutText);
-        underlinedLogoutText.setSpan(new UnderlineSpan(), 0, logoutText.length(), 0);
-        mLogoutTextView.setText(underlinedLogoutText);
-        mLogoutTextView.setOnClickListener(new OnClickListener() {
+//        mLogInProgress = (ProgressBar) findViewById(R.id.log_in_progress);
 
-            @Override
-            public void onClick(View v) {
-                mAuthManager.clearAuthorizationState(new APIListener() {
-                    @Override
-                    public void onSuccess(Bundle results) {
-                        runOnUiThread(new Runnable() {
+//        mReturnToApp = (TextView)findViewById(R.id.return_to_app);
 
-                            @Override
-                            public void run() {
-                                setLoggedOutState();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(AuthError authError) {
-                        Log.e(TAG, "Error clearing authorization state.", authError);
-                    }
-                });
-            }
-        });
-
-        mLogInProgress = (ProgressBar) findViewById(R.id.log_in_progress);
-
-        mReturnToApp = (TextView)findViewById(R.id.return_to_app);
-
-        String returnToAppText = "Return to App";
-        SpannableString underlinedReturnToAppText = new SpannableString(returnToAppText);
-        underlinedReturnToAppText.setSpan(new UnderlineSpan(), 0, returnToAppText.length(), 0);
-        mReturnToApp.setText(underlinedReturnToAppText);
-        mReturnToApp.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuthManager.clearAuthorizationState(new APIListener() {
-                    @Override
-                    public void onSuccess(Bundle results) {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                if ( mAuthManager != null )
-                                {
-                                    // if user clicks on Return to App link, check the login state.
-                                    updateLoginState();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(AuthError authError) {
-                        Log.e(TAG, "Error clearing authorization state.", authError);
-                    }
-                });
-            }
-        });
+//        String returnToAppText = "Return to App";
+//        SpannableString underlinedReturnToAppText = new SpannableString(returnToAppText);
+//        underlinedReturnToAppText.setSpan(new UnderlineSpan(), 0, returnToAppText.length(), 0);
+//        mReturnToApp.setText(underlinedReturnToAppText);
+//        mReturnToApp.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mAuthManager.clearAuthorizationState(new APIListener() {
+//                    @Override
+//                    public void onSuccess(Bundle results) {
+//                        runOnUiThread(new Runnable() {
+//
+//                            @Override
+//                            public void run() {
+//                                if ( mAuthManager != null )
+//                                {
+//                                    // if user clicks on Return to App link, check the login state.
+//                                    updateLoginState();
+//                                }
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onError(AuthError authError) {
+//                        Log.e(TAG, "Error clearing authorization state.", authError);
+//                    }
+//                });
+//            }
+//        });
     }
 
     /**
@@ -227,7 +233,7 @@ public class LoginActivity extends Activity{
                 @Override
                 public void run() {
                     // At this point we know the authorization completed, so remove the ability to return to the app to sign-in again
-                    mReturnToApp.setVisibility(TextView.GONE);
+//                    mReturnToApp.setVisibility(TextView.GONE);
                 }
             });
             mAuthManager.getProfile(new ProfileListener());
@@ -277,7 +283,7 @@ public class LoginActivity extends Activity{
      */
     private void updateProfileView(String profileInfo) {
         Log.d(TAG, "Updating profile view");
-        mProfileText.setText(profileInfo);
+//        mProfileText.setText(profileInfo);
     }
 
     /**
@@ -285,7 +291,7 @@ public class LoginActivity extends Activity{
      */
     private void resetProfileView(){
         setLoggingInState(false);
-        mProfileText.setText(getString(R.string.default_message));
+//        mProfileText.setText(getString(R.string.default_message));
     }
 
     /**
@@ -293,7 +299,7 @@ public class LoginActivity extends Activity{
      */
     private void setLoggedOutState(){
         mLoginButton.setVisibility(Button.VISIBLE);
-        setLoggedInButtonsVisibility(Button.GONE);
+//        setLoggedInButtonsVisibility(Button.GONE);
         mIsLoggedIn = false;
         resetProfileView();
     }
@@ -302,8 +308,8 @@ public class LoginActivity extends Activity{
      * Sets the state of the application to reflect that the user is currently authorized.
      */
     private void setLoggedInState(){
-        mLoginButton.setVisibility(Button.GONE);
-        setLoggedInButtonsVisibility(Button.VISIBLE);
+//        mLoginButton.setVisibility(Button.GONE);
+//        setLoggedInButtonsVisibility(Button.VISIBLE);
         mIsLoggedIn = true;
         setLoggingInState(false);
     }
@@ -312,9 +318,9 @@ public class LoginActivity extends Activity{
      * Changes the visibility for both of the buttons that are available during the logged in state
      * @param visibility the visibility to which the buttons should be set
      */
-    private void setLoggedInButtonsVisibility(int visibility){
-        mLogoutTextView.setVisibility(visibility);
-    }
+//    private void setLoggedInButtonsVisibility(int visibility){
+//        mLogoutTextView.setVisibility(visibility);
+//    }
 
     /**
      * Turns on/off display elements which indicate that the user is currently in the process of logging in
@@ -332,14 +338,14 @@ public class LoginActivity extends Activity{
         }
         else{
             if(mIsLoggedIn){
-                setLoggedInButtonsVisibility(Button.VISIBLE);
+//                setLoggedInButtonsVisibility(Button.VISIBLE);
             }
             else{
                 mLoginButton.setVisibility(Button.VISIBLE);
             }
-            mReturnToApp.setVisibility(TextView.GONE);
-            mLogInProgress.setVisibility(ProgressBar.GONE);
-            mProfileText.setVisibility(TextView.VISIBLE);
+//            mReturnToApp.setVisibility(TextView.GONE);
+//            mLogInProgress.setVisibility(ProgressBar.GONE);
+//            mProfileText.setVisibility(TextView.VISIBLE);
         }
     }
 

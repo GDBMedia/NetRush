@@ -11,7 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        style="@android:style/Widget.ProgressBar.Inverse"/>
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_above="@+id/loginButton"
+        android:layout_centerHorizontal="true" />
 
     <!--<EditText-->
         <!--android:layout_width="wrap_content"-->
@@ -45,47 +47,34 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_info"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="76dp" />
-
-    <!--<Button-->
+    <!--<TextView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:text="Login"-->
-        <!--android:id="@+id/loginButton"-->
-        <!--android:layout_below="@+id/passwordInput"-->
+        <!--android:id="@+id/profile_info"-->
+        <!--android:layout_alignParentTop="true"-->
         <!--android:layout_centerHorizontal="true"-->
-        <!--android:background="#549a04" />-->
+        <!--android:layout_marginTop="76dp" />-->
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
         android:id="@+id/logout"
         android:text="@string/logout"
         android:visibility="gone"
         android:clickable="true"
         android:textColor="#000"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/log_in_progress"
+        android:layout_centerHorizontal="true" />
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
         android:id="@+id/return_to_app"
         android:text="@string/return_to_app"
         android:visibility="gone"
         android:clickable="true"
         android:textColor="#000"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
