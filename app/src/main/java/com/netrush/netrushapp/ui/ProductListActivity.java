@@ -18,7 +18,10 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        StringBuilder profileBuilder = new StringBuilder();
+        final String profile = profileBuilder.toString();
         Log.v("Test", pref.getString("Email", "fail"));
+        Log.v("Profile test", profile);
     }
 
     @Override
