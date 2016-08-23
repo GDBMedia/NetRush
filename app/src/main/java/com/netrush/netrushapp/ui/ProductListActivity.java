@@ -144,14 +144,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         final EditText txtUrl = new EditText(this);
 
-// Set the default text to a link of the Queen
-        txtUrl.setHint("http://www.librarising.com/astrology/celebs/images2/QR/queenelizabethii.jpg");
+        txtUrl.setHint("Password");
 
         new AlertDialog.Builder(this)
-                .setTitle("Moustachify Link")
-                .setMessage("Paste in the link of an image to moustachify!")
+                .setTitle("Enter Amazon Password")
+//                .setMessage("Paste in the link of an image to moustachify!")
                 .setView(txtUrl)
-                .setPositiveButton("Moustachify", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String url = txtUrl.getText().toString();
 //                        moustachify(null, url);
