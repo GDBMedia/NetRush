@@ -79,10 +79,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Override
         public void onClick(View view) {
             ProductListActivity.setButtonVisable();
-
-
-
-
         }
     }
 }

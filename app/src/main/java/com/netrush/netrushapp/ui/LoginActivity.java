@@ -1,63 +1,4 @@
 package com.netrush.netrushapp.ui;
-//
-//import android.content.Intent;
-//import android.content.SharedPreferences;
-//import android.support.v7.app.AppCompatActivity;
-//import android.os.Bundle;
-//import android.util.Log;
-//import android.view.View;
-//import android.widget.Button;
-//import android.widget.EditText;
-//
-//import com.netrush.netrushapp.R;
-//
-//
-//import butterknife.Bind;
-//import butterknife.ButterKnife;
-//
-//public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-//    @Bind(R.id.emailInput) EditText mEmail;
-//    @Bind(R.id.passwordInput) EditText mPasswordInput;
-//    @Bind(R.id.loginButton) Button mLoginButton;
-//
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-//        Log.v("Test", pref.getString("Email", "fail"));
-//
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_login);
-//        ButterKnife.bind(this);
-//        mLoginButton.setOnClickListener(this);
-//
-//        if (pref.getBoolean("LoggedIn", false)) {
-//            Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
-//            startActivity(intent);
-//        }
-//    }
-//
-//    @Override
-//    public void onClick(View view) {
-//        if(view == mLoginButton) {
-//            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-//            SharedPreferences.Editor editor = pref.edit();
-//            String Email = mEmail.getText().toString().trim();
-//            String Password = mPasswordInput.getText().toString().trim();
-//            editor.putBoolean("LoggedIn", true);
-//            editor.putString("Email", Email);
-//            editor.putString("Password", Password);
-//            editor.apply();
-//
-//            Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
-//            startActivity(intent);
-//        }
-//    }
-//}
-
-
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 import com.amazon.identity.auth.device.authorization.api.AmazonAuthorizationManager;
 import com.amazon.identity.auth.device.authorization.api.AuthorizationListener;
@@ -99,16 +40,11 @@ import android.view.View.OnClickListener;
 public class LoginActivity extends Activity{
 
     private static final String TAG = LoginActivity.class.getName();
-
     private static final String[] APP_SCOPES= {"profile"};
-
     private ImageButton mLoginButton;
     private AmazonAuthorizationManager mAuthManager;
     private boolean mIsLoggedIn;
 
-    /* (non-Javadoc)
-     * @see android.app.Activity#onCreate(android.os.Bundle)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +73,6 @@ public class LoginActivity extends Activity{
             startActivity(intent);
         }
         mLoginButton.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
@@ -167,8 +102,6 @@ public class LoginActivity extends Activity{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // At this point we know the authorization completed, so remove the ability to return to the app to sign-in again
-//                    mReturnToApp.setVisibility(TextView.GONE);
                 }
             });
             mAuthManager.getProfile(new ProfileListener());
@@ -327,10 +260,12 @@ public class LoginActivity extends Activity{
             }
             else{
                 StringBuilder profileBuilder = new StringBuilder();
-                profileBuilder.append(String.format("Welcome, %s!\n", profileBundle.getString(AuthzConstants.PROFILE_KEY.NAME.val)));
-                profileBuilder.append(String.format("Your email is %s\n", profileBundle.getString(AuthzConstants.PROFILE_KEY.EMAIL.val)));
+                profileBuilder.append(String.format(profileBundle.getString(AuthzConstants.PROFILE_KEY.EMAIL.val)));
                 final String profile = profileBuilder.toString();
-                Log.d(TAG, "Profile Response: " + profile);
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("UserEmail", profile);
+                editor.apply();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

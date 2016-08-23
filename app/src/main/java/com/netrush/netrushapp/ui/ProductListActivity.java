@@ -1,7 +1,9 @@
 package com.netrush.netrushapp.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
+import com.amazon.identity.auth.device.authorization.api.AuthzConstants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
@@ -40,8 +44,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
-    @Bind(R.id.orders) RecyclerView mRecyclerview;
     public static Button mCheckout;
+    @Bind(R.id.orders) RecyclerView mRecyclerview;
 
 
     @Override
@@ -52,8 +56,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         StringBuilder profileBuilder = new StringBuilder();
         final String profile = profileBuilder.toString();
-        Log.v("Test", pref.getString("Email", "fail"));
-        Log.v("Profile test", profile);
+        Log.v("userEmail", pref.getString("UserEmail", profile));
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mCheckout.setOnClickListener(this);
@@ -138,7 +141,24 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
+        final EditText txtUrl = new EditText(this);
+
+        txtUrl.setHint("Password");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Enter Amazon Password")
+//                .setMessage("Paste in the link of an image to moustachify!")
+                .setView(txtUrl)
+                .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String url = txtUrl.getText().toString();
+//                        moustachify(null, url);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                .show();
     }
-
-
 }
