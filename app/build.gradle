@@ -31,6 +31,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'se.akerfeldt:okhttp-signpost:1.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile files('libs/login-with-amazon-sdk.jar')
+    compile files('C:/Users/Jeff/AndroidStudioProjects/NetRushApp/login-with-amazon-sdk.jar')
     compile 'com.android.support:design:24.1.1'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.2.+'

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">NetRushApp</string>
+    <string name="default_message">Welcome to the NetRush App! Please login with Amazon below to get started.</string>
+    <string name="logout">Logout</string>
+    <string name="return_to_app">Return to App</string>
+
     <string name="title_activity_navigation">NavigationActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

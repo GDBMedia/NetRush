@@ -50,7 +50,11 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_products);
         ButterKnife.bind(this);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        StringBuilder profileBuilder = new StringBuilder();
+        final String profile = profileBuilder.toString();
         Log.v("Test", pref.getString("Email", "fail"));
+        Log.v("Profile test", profile);
+
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mCheckout.setOnClickListener(this);
         mRecyclerview.setHasFixedSize(true);
@@ -127,7 +131,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("LoggedIn", false);
         editor.apply();
-        
+
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
         startActivity(intent);
     }
