@@ -40,7 +40,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
-    public static Map<String, String> mProducts= new HashMap<String, String>();
     @Bind(R.id.orders) RecyclerView mRecyclerview;
     public static Button mCheckout;
 
@@ -66,7 +65,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private void getOrders() {
         final AmazonService amazonService = new AmazonService();
 
-        amazonService.getOrders(new Callback() {
+        amazonService.getOrders("1" , new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -135,23 +134,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        createCart();
     }
 
-    private void createCart() {
 
-            final AmazonService amazonService = new AmazonService();
-                amazonService.createCart(mProducts, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String purchaseUrl = amazonService.proccessCart(response, 1);
-                        Log.d(TAG, "CreateCart: " + purchaseUrl);
-                    }
-                });
-    }
 }
