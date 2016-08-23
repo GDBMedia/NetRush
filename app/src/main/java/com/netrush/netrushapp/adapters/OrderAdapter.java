@@ -137,8 +137,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             itemNum++;
             ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
             ProductListActivity.mProducts.put(quantKey, "1");
-
-
         }
     }
 }

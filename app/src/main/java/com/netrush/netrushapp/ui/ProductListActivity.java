@@ -1,7 +1,9 @@
 package com.netrush.netrushapp.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
+import com.amazon.identity.auth.device.authorization.api.AuthzConstants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
@@ -41,8 +45,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static Map<String, String> mProducts= new HashMap<String, String>();
-    @Bind(R.id.orders) RecyclerView mRecyclerview;
     public static Button mCheckout;
+    @Bind(R.id.orders) RecyclerView mRecyclerview;
 
 
     @Override
@@ -53,8 +57,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         StringBuilder profileBuilder = new StringBuilder();
         final String profile = profileBuilder.toString();
-        Log.v("Test", pref.getString("Email", "fail"));
-        Log.v("Profile test", profile);
+        Log.v("userEmail", pref.getString("UserEmail", profile));
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mCheckout.setOnClickListener(this);
@@ -139,23 +142,25 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        createCart();
-    }
+        final EditText txtUrl = new EditText(this);
 
-    private void createCart() {
+// Set the default text to a link of the Queen
+        txtUrl.setHint("http://www.librarising.com/astrology/celebs/images2/QR/queenelizabethii.jpg");
 
-            final AmazonService amazonService = new AmazonService();
-                amazonService.createCart(mProducts, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
+        new AlertDialog.Builder(this)
+                .setTitle("Moustachify Link")
+                .setMessage("Paste in the link of an image to moustachify!")
+                .setView(txtUrl)
+                .setPositiveButton("Moustachify", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String url = txtUrl.getText().toString();
+//                        moustachify(null, url);
                     }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String purchaseUrl = amazonService.proccessCart(response, 1);
-                        Log.d(TAG, "CreateCart: " + purchaseUrl);
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
                     }
-                });
+                })
+                .show();
     }
 }
