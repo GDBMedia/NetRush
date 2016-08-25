@@ -4,7 +4,26 @@
     <item
         android:id="@+id/logout"
         android:title="Logout"
-        android:visible="true"
-        />
+        android:visible="true" />
+
+    <item
+        android:id="@+id/sortByDateAscending"
+        android:title="Date Ascending"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/sortByDateDescending"
+        android:title="Date Descending"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/sortByCostLowToHigh"
+        android:title="Cost Low to High"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/sortByCostHighToLow"
+        android:title="Cost High to Low"
+        android:visible="true" />
 
 </menu>

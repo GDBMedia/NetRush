@@ -3,12 +3,14 @@ package com.netrush.netrushapp.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,14 +42,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class ProductListActivity extends AppCompatActivity implements View.OnClickListener{
+public class ProductListActivity extends AppCompatActivity{
     public final String TAG = this.getClass().getSimpleName();
-
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static Button mCheckout;
-    public static Button mCancel;
-    public static Button mConfirm;
     @Bind(R.id.orders) RecyclerView mRecyclerview;
 
 
@@ -62,33 +61,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         Log.v("userEmail", pref.getString("UserEmail", profile));
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
-        mCheckout.setOnClickListener(this);
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
         getOrders();
-    }
-
-    public static void setButtonVisable(){
-//            LayoutInflater inflater = getLayoutInflater();
-//            View passwordDialog = inflater.inflate(R.layout.password_dialog_layout, null);
-//
-//            final EditText userAmazonPassword = (EditText) passwordDialog.findViewById(R.id.userPassword);
-//
-//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//            alert.setTitle("Confirm with Amazon Password");
-//            alert.setView(passwordDialog);
-//            alert.setCancelable(true);
-//
-//            mCancel = (Button) findViewById(R.id.cancel);
-//            mCancel.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    onBackPressed();
-//                }
-//            });
-//            AlertDialog dialog = alert.create();
-//            dialog.show();
-//        mCheckout.setVisibility(View.VISIBLE);
     }
 
     private void getOrders() {
@@ -136,6 +111,24 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.product_list_activity, menu);
+
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -157,36 +150,5 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
         startActivity(intent);
     }
-
-    @Override
-    public void onClick(View view) {
-//        LayoutInflater inflater = getLayoutInflater();
-//        View passwordDialog = inflater.inflate(R.layout.password_dialog_layout, null);
-//
-//        final EditText userAmazonPassword = (EditText) passwordDialog.findViewById(R.id.userPassword);
-//
-//        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//        alert.setTitle("Confirm with Amazon Password");
-//        alert.setView(passwordDialog);
-//        alert.setCancelable(true);
-//
-//        mCancel = (Button) findViewById(R.id.cancel);
-//        mCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onBackPressed();
-//            }
-//        });
-//        AlertDialog dialog = alert.create();
-//        dialog.show();
-    }
 }
 
-//        alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                String pass = Password.getText().toString();
-//                Toast.makeText(getBaseContext(), " Password: " + pass, Toast.LENGTH_SHORT).show();
-//            }
-//        });

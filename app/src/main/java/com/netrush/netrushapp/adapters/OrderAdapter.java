@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,8 @@ import android.widget.Toast;
 
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
-import com.netrush.netrushapp.ui.ProductListActivity;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -30,7 +28,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
-//    public Button mCancel;
 
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
@@ -60,7 +57,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
-//        @Bind(R.id.cancel) Button mCancel;
 
         private Context mContext;
 
@@ -95,14 +91,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 alert.setTitle("Confirm with Amazon Password");
                 alert.setView(passwordDialog);
                 alert.setCancelable(true);
+                final AlertDialog dialog = alert.create();
+                dialog.show();
 
                 Button cancel = (Button) passwordDialog.findViewById(R.id.cancel);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        AlertDialog cancelDialog = alert.create();
-//                        cancelDialog.dismiss();
-                        Toast.makeText(mContext, "Cancel Button is Thinging!", Toast.LENGTH_LONG).show();
+
+                        dialog.hide();
                     }
                 });
 
@@ -110,13 +107,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(mContext, "Confirm Button is Thinging Too!", Toast.LENGTH_LONG).show();
+                        String password = userAmazonPassword.getText().toString().trim();
+                        // TODO Webcrawler to purchase item goes here ---------------------------------------------------------
+                        Toast.makeText(mContext, "Your password is " + password, Toast.LENGTH_LONG).show();
                     }
                 });
-                AlertDialog dialog = alert.create();
-                dialog.show();
             }
-//            ProductListActivity.setButtonVisable();
         }
     }
 }
