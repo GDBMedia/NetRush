@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,6 +46,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static Button mCheckout;
+    public static Button mCancel;
+    public static Button mConfirm;
     @Bind(R.id.orders) RecyclerView mRecyclerview;
 
 
@@ -66,12 +69,30 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     public static void setButtonVisable(){
-        mCheckout.setVisibility(View.VISIBLE);
+//            LayoutInflater inflater = getLayoutInflater();
+//            View passwordDialog = inflater.inflate(R.layout.password_dialog_layout, null);
+//
+//            final EditText userAmazonPassword = (EditText) passwordDialog.findViewById(R.id.userPassword);
+//
+//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//            alert.setTitle("Confirm with Amazon Password");
+//            alert.setView(passwordDialog);
+//            alert.setCancelable(true);
+//
+//            mCancel = (Button) findViewById(R.id.cancel);
+//            mCancel.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    onBackPressed();
+//                }
+//            });
+//            AlertDialog dialog = alert.create();
+//            dialog.show();
+//        mCheckout.setVisibility(View.VISIBLE);
     }
 
     private void getOrders() {
         final AmazonService amazonService = new AmazonService();
-
         amazonService.getOrders("1" , new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -93,8 +114,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         mRecyclerview.setAdapter(mAdapter);
                     }
                 });
-
-
             }
         });
     }
@@ -141,24 +160,33 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        final EditText txtUrl = new EditText(this);
-
-        txtUrl.setHint("Password");
-
-        new AlertDialog.Builder(this)
-                .setTitle("Enter Amazon Password")
-//                .setMessage("Paste in the link of an image to moustachify!")
-                .setView(txtUrl)
-                .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String url = txtUrl.getText().toString();
-//                        moustachify(null, url);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                })
-                .show();
+//        LayoutInflater inflater = getLayoutInflater();
+//        View passwordDialog = inflater.inflate(R.layout.password_dialog_layout, null);
+//
+//        final EditText userAmazonPassword = (EditText) passwordDialog.findViewById(R.id.userPassword);
+//
+//        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//        alert.setTitle("Confirm with Amazon Password");
+//        alert.setView(passwordDialog);
+//        alert.setCancelable(true);
+//
+//        mCancel = (Button) findViewById(R.id.cancel);
+//        mCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onBackPressed();
+//            }
+//        });
+//        AlertDialog dialog = alert.create();
+//        dialog.show();
     }
 }
+
+//        alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String pass = Password.getText().toString();
+//                Toast.makeText(getBaseContext(), " Password: " + pass, Toast.LENGTH_SHORT).show();
+//            }
+//        });

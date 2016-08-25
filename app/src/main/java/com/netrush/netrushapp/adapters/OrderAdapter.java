@@ -1,13 +1,17 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
@@ -26,6 +30,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
+//    public Button mCancel;
 
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
@@ -55,6 +60,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
+//        @Bind(R.id.cancel) Button mCancel;
+
         private Context mContext;
 
         public OrderViewHolder(View itemView) {
@@ -78,7 +85,38 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         @Override
         public void onClick(View view) {
-            ProductListActivity.setButtonVisable();
+            if (view == cv) {
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+                final View passwordDialog = inflater.inflate(R.layout.password_dialog_layout, null);
+
+                final EditText userAmazonPassword = (EditText) passwordDialog.findViewById(R.id.userPassword);
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                alert.setTitle("Confirm with Amazon Password");
+                alert.setView(passwordDialog);
+                alert.setCancelable(true);
+
+                Button cancel = (Button) passwordDialog.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        AlertDialog cancelDialog = alert.create();
+//                        cancelDialog.dismiss();
+                        Toast.makeText(mContext, "Cancel Button is Thinging!", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                Button confirm = (Button) passwordDialog.findViewById(R.id.confirm);
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mContext, "Confirm Button is Thinging Too!", Toast.LENGTH_LONG).show();
+                    }
+                });
+                AlertDialog dialog = alert.create();
+                dialog.show();
+            }
+//            ProductListActivity.setButtonVisable();
         }
     }
 }
