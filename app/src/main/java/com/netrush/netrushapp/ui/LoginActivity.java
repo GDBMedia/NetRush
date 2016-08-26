@@ -160,9 +160,6 @@ public class LoginActivity extends Activity{
         resetProfileView();
     }
 
-    /**
-     * Sets the state of the application to reflect that the user is currently authorized.
-     */
     private void setLoggedInState(){
         mIsLoggedIn = true;
         setLoggingInState(false);
@@ -261,6 +258,7 @@ public class LoginActivity extends Activity{
             else{
                 StringBuilder profileBuilder = new StringBuilder();
                 profileBuilder.append(String.format(profileBundle.getString(AuthzConstants.PROFILE_KEY.EMAIL.val)));
+                Log.v("Profile User ID", profileBundle.getString(AuthzConstants.PROFILE_KEY.USER_ID.val));
                 final String profile = profileBuilder.toString();
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
                 SharedPreferences.Editor editor = pref.edit();
