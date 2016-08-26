@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -42,10 +43,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class ProductListActivity extends AppCompatActivity{
+public class ProductListActivity extends AppCompatActivity implements View.OnClickListener{
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
+    public static Map<String, String> mProducts= new HashMap<String, String>();
     public static Button mCheckout;
     @Bind(R.id.orders) RecyclerView mRecyclerview;
 
@@ -64,6 +66,16 @@ public class ProductListActivity extends AppCompatActivity{
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
         getOrders();
+    }
+
+    public static void setButtonVisable(){
+
+        mCheckout.setVisibility(View.VISIBLE);
+        int total = 0;
+        for (String item : mProducts.values()) {
+                total++;
+        }
+        mCheckout.setText("Checkout(" + total +")");
     }
 
     private void getOrders() {
@@ -149,6 +161,28 @@ public class ProductListActivity extends AppCompatActivity{
 
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View view) {
+        createCart();
+    }
+
+    private void createCart() {
+
+        final AmazonService amazonService = new AmazonService();
+        amazonService.createCart(mProducts, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String purchaseUrl = amazonService.proccessCart(response, 1);
+                Log.d(TAG, "CreateCart: " + purchaseUrl);
+            }
+        });
     }
 }
 

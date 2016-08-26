@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
+import com.netrush.netrushapp.ui.ProductListActivity;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import butterknife.Bind;
@@ -28,6 +29,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
+    private int itemNum = 1;
+
 
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
@@ -81,38 +84,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         @Override
         public void onClick(View view) {
-            if (view == cv) {
-                LayoutInflater inflater = LayoutInflater.from(mContext);
-                final View passwordDialog = inflater.inflate(R.layout.password_dialog_layout, null);
-
-                final EditText userAmazonPassword = (EditText) passwordDialog.findViewById(R.id.userPassword);
-
-                final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                alert.setTitle("Confirm with Amazon Password");
-                alert.setView(passwordDialog);
-                alert.setCancelable(true);
-                final AlertDialog dialog = alert.create();
-                dialog.show();
-
-                Button cancel = (Button) passwordDialog.findViewById(R.id.cancel);
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        dialog.hide();
-                    }
-                });
-
-                Button confirm = (Button) passwordDialog.findViewById(R.id.confirm);
-                confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String password = userAmazonPassword.getText().toString().trim();
-                        // TODO Webcrawler to purchase item goes here ---------------------------------------------------------
-                        Toast.makeText(mContext, "Your password is " + password, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+            int itemPosition = getLayoutPosition();
+            String itemKey = "Item." + itemNum + ".ASIN";
+            String quantKey = "Item." + itemNum + ".Quantity";
+            ProductListActivity.setButtonVisable();
+            itemNum++;
+            ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
+            ProductListActivity.mProducts.put(quantKey, "1");
         }
     }
 }
