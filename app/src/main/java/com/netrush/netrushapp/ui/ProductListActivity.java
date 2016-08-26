@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,6 +48,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private OrderAdapter mAdapter;
     public static Map<String, String> mProducts= new HashMap<String, String>();
     public static Button mCheckout;
+    public static Button mCancel;
+    public static Button mConfirm;
     @Bind(R.id.orders) RecyclerView mRecyclerview;
 
 
@@ -79,7 +82,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private void getOrders() {
         final AmazonService amazonService = new AmazonService();
-
         amazonService.getOrders("1" , new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -101,8 +103,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         mRecyclerview.setAdapter(mAdapter);
                     }
                 });
-
-
             }
         });
     }
@@ -169,3 +169,4 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         });
     }
 }
+

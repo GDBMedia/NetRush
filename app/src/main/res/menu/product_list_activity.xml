@@ -7,10 +7,4 @@
         android:visible="true"
         />
 
-    <item
-        android:id="@+id/changePin"
-        android:title="Change Pin"
-        android:visible="true"
-        />
-
 </menu>

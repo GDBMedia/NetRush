@@ -1,13 +1,17 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
@@ -56,6 +60,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
+//        @Bind(R.id.cancel) Button mCancel;
+
         private Context mContext;
 
         public OrderViewHolder(View itemView) {
@@ -79,6 +85,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         @Override
         public void onClick(View view) {
+
             int itemPosition = getLayoutPosition();
             String itemKey = "Item." + itemNum + ".ASIN";
             String quantKey = "Item." + itemNum + ".Quantity";
@@ -86,6 +93,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             itemNum++;
             ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
             ProductListActivity.mProducts.put(quantKey, "1");
+
         }
     }
 }
