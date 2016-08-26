@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "470081004892",
+    "firebase_url": "https://netrushapp.firebaseio.com",
+    "project_id": "netrushapp",
+    "storage_bucket": "netrushapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470081004892:android:547cba6d376c0f83",
+        "android_client_info": {
+          "package_name": "com.netrush.netrushapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470081004892-6vnr6aomldu68ssmqucq4tvialal94tr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.netrush.netrushapp",
+            "certificate_hash": "00BD9D8ADD49839CDDA36372A5C78A120B3347B3"
+          }
+        },
+        {
+          "client_id": "470081004892-vg14vhhtr36lhlusoj6difn75601jlq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXrMXJobf-MION_ZwgP4l-lKOvtpB1gwM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470081004892-vg14vhhtr36lhlusoj6difn75601jlq2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

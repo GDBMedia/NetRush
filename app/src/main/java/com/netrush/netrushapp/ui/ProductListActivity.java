@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -44,6 +45,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
+    public static Map<String, String> mProducts= new HashMap<String, String>();
     public static Button mCheckout;
     @Bind(R.id.orders) RecyclerView mRecyclerview;
 
@@ -66,7 +68,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     public static void setButtonVisable(){
+
         mCheckout.setVisibility(View.VISIBLE);
+        int total = 0;
+        for (String item : mProducts.values()) {
+                total++;
+        }
+        mCheckout.setText("Checkout(" + total +")");
     }
 
     private void getOrders() {
@@ -141,24 +149,23 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        final EditText txtUrl = new EditText(this);
+        createCart();
+    }
 
-        txtUrl.setHint("Password");
+    private void createCart() {
 
-        new AlertDialog.Builder(this)
-                .setTitle("Enter Amazon Password")
-//                .setMessage("Paste in the link of an image to moustachify!")
-                .setView(txtUrl)
-                .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String url = txtUrl.getText().toString();
-//                        moustachify(null, url);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                })
-                .show();
+        final AmazonService amazonService = new AmazonService();
+        amazonService.createCart(mProducts, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String purchaseUrl = amazonService.proccessCart(response, 1);
+                Log.d(TAG, "CreateCart: " + purchaseUrl);
+            }
+        });
     }
 }

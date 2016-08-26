@@ -26,6 +26,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
+    private int itemNum = 1;
 
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
@@ -78,7 +79,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         @Override
         public void onClick(View view) {
+            int itemPosition = getLayoutPosition();
+            String itemKey = "Item." + itemNum + ".ASIN";
+            String quantKey = "Item." + itemNum + ".Quantity";
             ProductListActivity.setButtonVisable();
+            itemNum++;
+            ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
+            ProductListActivity.mProducts.put(quantKey, "1");
         }
     }
 }
