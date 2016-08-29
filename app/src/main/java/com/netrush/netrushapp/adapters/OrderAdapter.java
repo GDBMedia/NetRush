@@ -2,17 +2,13 @@ package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
@@ -76,9 +72,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         public void bindOrder(Order order) {
             int itemPosition = getLayoutPosition();
             if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
-                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
+                setClicked();
             }else{
-                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+                setUnClicked();
             }
             String title = order.getTitle();
             if(order.getTitle().length() > 30){
@@ -90,18 +86,30 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         }
 
+        private void setUnClicked() {
+            cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+            mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            mdate.setTextColor(ContextCompat.getColor(mContext, R.color.divider));
+        }
+
+        private void setClicked() {
+            cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
+            mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+            mdate.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+        }
+
         @Override
         public void onClick(View view) {
             int itemPosition = getLayoutPosition();
             if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
-                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+               setUnClicked();
                 ProductListActivity.mAsins.remove( mOrderArrayList.get(itemPosition).getAsin());
             }else{
-                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
+                setClicked();
                 ProductListActivity.mAsins.add( mOrderArrayList.get(itemPosition).getAsin());
             }
 
-            ProductListActivity.setButtonVisable();
+            ProductListActivity.setButtonVisibility();
 
         }
     }

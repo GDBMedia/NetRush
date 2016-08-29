@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/productimg"
                 android:layout_margin="5dp"
+                android:textColor="@color/divider"
                 android:text="Last Order Date"/>
 
         </RelativeLayout>

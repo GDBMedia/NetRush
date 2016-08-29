@@ -1,25 +1,20 @@
 package com.netrush.netrushapp.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RelativeLayout;
 
-import com.amazon.identity.auth.device.authorization.api.AuthzConstants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
@@ -33,11 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -49,11 +41,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static ArrayList<String> mAsins = new ArrayList<>();
-//    public static Map<String, String> mProducts= new HashMap<String, String>();
-    public static Button mCheckout;
-    public static Button mCancel;
-    public static Button mConfirm;
-    @Bind(R.id.orders) RecyclerView mRecyclerview;
+    private static Button mCheckout;
+    private static RecyclerView mRecyclerview;
+    private static RelativeLayout.LayoutParams layoutparams;
 
 
     @Override
@@ -67,16 +57,28 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         Log.v("userEmail", pref.getString("UserEmail", profile));
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
+        mRecyclerview = (RecyclerView) findViewById(R.id.orders);
         mCheckout.setOnClickListener(this);
+        layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
         getOrders();
     }
 
-    public static void setButtonVisable(){
+    public static void setButtonVisibility(){
+        if(mAsins.size() == 0){
+            mCheckout.setVisibility(View.INVISIBLE);
+            setRecyclerBottomMargin(0);
+        }else {
+            setRecyclerBottomMargin(mCheckout.getHeight());
+            mCheckout.setVisibility(View.VISIBLE);
+            mCheckout.setText("Checkout(" + mAsins.size() + ")");
+        }
+    }
 
-        mCheckout.setVisibility(View.VISIBLE);
-        mCheckout.setText("Checkout(" + mAsins.size() +")");
+    private static void setRecyclerBottomMargin(int height) {
+        layoutparams.setMargins(0, 0, 0, height);
+        mRecyclerview.setLayoutParams(layoutparams);
     }
 
     private void getOrders() {
@@ -97,16 +99,20 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 ProductListActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayList<Order> orders = sortByDate(mOrders);
-                        mAdapter = new OrderAdapter(ProductListActivity.this, orders);
-                        mRecyclerview.setAdapter(mAdapter);
+                        ArrayList<Order> orders = sortByDateAscending(mOrders);
+                        setAdapter(orders);
                     }
                 });
             }
         });
     }
 
-    private ArrayList<Order> sortByDate(ArrayList<Order> orders) {
+    private void setAdapter(ArrayList<Order> orders) {
+        mAdapter = new OrderAdapter(ProductListActivity.this, orders);
+        mRecyclerview.setAdapter(mAdapter);
+    }
+
+    private ArrayList<Order> sortByDateAscending(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
             DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
             @Override public int compare(Order o1, Order o2) {
@@ -130,8 +136,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     @Override
         public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.logout) {
-            logout();
+        switch (id){
+            case R.id.logout:
+                logout();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -14,7 +14,7 @@
 
     <Button
         android:text="Checkout"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:id="@+id/checkoutButton"
         android:background="@color/colorAccent"
         android:layout_alignParentBottom="true"
