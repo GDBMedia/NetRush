@@ -3,6 +3,7 @@ package com.netrush.netrushapp.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +48,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
-    public static Map<String, String> mProducts= new HashMap<String, String>();
+    public static ArrayList<String> mAsins = new ArrayList<>();
+//    public static Map<String, String> mProducts= new HashMap<String, String>();
     public static Button mCheckout;
     public static Button mCancel;
     public static Button mConfirm;
@@ -73,11 +76,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     public static void setButtonVisable(){
 
         mCheckout.setVisibility(View.VISIBLE);
-        int total = 0;
-        for (String item : mProducts.values()) {
-                total++;
-        }
-        mCheckout.setText("Checkout(" + total +")");
+        mCheckout.setText("Checkout(" + mAsins.size() +")");
     }
 
     private void getOrders() {
@@ -153,9 +152,19 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void createCart() {
+        Map<String, String> products = new HashMap<>();
+        int itemNum = 1;
+        for(String asin : mAsins){
+            String itemKey = "Item." + itemNum + ".ASIN";
+            String quantKey = "Item." + itemNum + ".Quantity";
+            products.put(itemKey, asin);
+            products.put(quantKey, "1");
+            itemNum++;
+        }
+
 
         final AmazonService amazonService = new AmazonService();
-        amazonService.createCart(mProducts, new Callback() {
+        amazonService.createCart(products, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -165,6 +174,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             public void onResponse(Call call, Response response) throws IOException {
                 String purchaseUrl = amazonService.proccessCart(response, 1);
                 Log.d(TAG, "CreateCart: " + purchaseUrl);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(purchaseUrl));
+                startActivity(i);
             }
         });
     }

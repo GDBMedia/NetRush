@@ -1,6 +1,7 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -73,6 +74,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         public void bindOrder(Order order) {
+            int itemPosition = getLayoutPosition();
+            if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
+                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
+            }else{
+                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+            }
             String title = order.getTitle();
             if(order.getTitle().length() > 30){
                 title = order.getTitle().substring(0, 30) + mContext.getString(R.string.elip);
@@ -85,14 +92,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         @Override
         public void onClick(View view) {
-
             int itemPosition = getLayoutPosition();
-            String itemKey = "Item." + itemNum + ".ASIN";
-            String quantKey = "Item." + itemNum + ".Quantity";
+            if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
+                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+                ProductListActivity.mAsins.remove( mOrderArrayList.get(itemPosition).getAsin());
+            }else{
+                cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
+                ProductListActivity.mAsins.add( mOrderArrayList.get(itemPosition).getAsin());
+            }
+
             ProductListActivity.setButtonVisable();
-            itemNum++;
-            ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
-            ProductListActivity.mProducts.put(quantKey, "1");
 
         }
     }
