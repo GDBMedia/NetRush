@@ -98,7 +98,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 ProductListActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayList<Order> orders = sortByDateAscending(mOrders);
+                        ArrayList<Order> orders = sortByDateNewestToOldest(mOrders);
                         setAdapter(orders);
                     }
                 });
@@ -111,7 +111,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mRecyclerview.setAdapter(mAdapter);
     }
 
-    private ArrayList<Order> sortByDateAscending(ArrayList<Order> orders) {
+    private ArrayList<Order> sortByDateNewestToOldest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
             DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
             @Override public int compare(Order o1, Order o2) {
@@ -122,6 +122,39 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+        return orders;
+    }
+
+    private ArrayList<Order> sortByDateOldestToNewest(ArrayList<Order> orders) {
+        Collections.sort(orders, new Comparator<Order>() {
+            DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+            @Override public int compare(Order o1, Order o2) {
+                try {
+                    return f.parse(o1.getDate()).compareTo(f.parse(o2.getDate()));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+        return orders;
+    }
+    private ArrayList<Order> sortAlphabeticallyAZ(ArrayList<Order> orders) {
+        Collections.sort(orders, new Comparator<Order>() {
+            @Override
+            public int compare(final Order object1, final Order object2) {
+                return object1.getTitle().compareTo(object2.getTitle());
+            }
+        } );
+        return orders;
+    }
+
+    private ArrayList<Order> sortAlphabeticallyZA(ArrayList<Order> orders) {
+        Collections.sort(orders, new Comparator<Order>() {
+            @Override
+            public int compare(final Order object1, final Order object2) {
+                return object2.getTitle().compareTo(object1.getTitle());
+            }
+        } );
         return orders;
     }
 
@@ -153,13 +186,33 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     @Override
         public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ArrayList<Order> orders;
         switch (id){
             case R.id.logout:
                 logout();
                 break;
+            case R.id.sortByDateNewestToOldest:
+                 orders = sortByDateNewestToOldest(mOrders);
+                setAdapter(orders);
+                break;
+            case R.id.sortByDateOldestToNewest:
+                orders = sortByDateOldestToNewest(mOrders);
+                setAdapter(orders);
+                break;
+            case R.id.sortAlphabeticallyAZ:
+                orders = sortAlphabeticallyAZ(mOrders);
+                setAdapter(orders);
+                break;
+            case R.id.sortAlphabeticallyZA:
+                orders = sortAlphabeticallyZA(mOrders);
+                setAdapter(orders);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void logout() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);

@@ -16,16 +16,16 @@
                 app:showAsAction="always|withText" />
 
             <item
-                android:id="@+id/sortByDateAscending"
-                android:title="Date Ascending"
-                android:icon="@drawable/ic_arrow_upward_black_48dp"
+                android:id="@+id/sortByDateNewestToOldest"
+                android:title="Newest to Oldest"
+                android:icon="@drawable/ic_arrow_downward_black_48dp"
                 app:showAsAction="always|withText"
                 android:visible="true" />
 
             <item
-                android:id="@+id/sortByDateDescending"
-                android:title="Date Descending"
-                android:icon="@drawable/ic_arrow_downward_black_48dp"
+                android:id="@+id/sortByDateOldestToNewest"
+                android:title="Oldest to Newest"
+                android:icon="@drawable/ic_arrow_upward_black_48dp"
                 app:showAsAction="always|withText"
                 android:visible="true" />
 
