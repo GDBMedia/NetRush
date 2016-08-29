@@ -2,9 +2,47 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/logout"
-        android:title="Logout"
-        android:visible="true"
-        />
+        android:id="@+id/empty"
+        android:title="Test"
+        android:icon="@drawable/menu"
+        android:orderInCategory="101"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:title="Logout"
+                android:visible="true"
+                android:icon="@drawable/logout_icon"
+                app:showAsAction="always|withText" />
+
+            <item
+                android:id="@+id/sortByDateAscending"
+                android:title="Date Ascending"
+                android:icon="@drawable/ic_arrow_upward_black_48dp"
+                app:showAsAction="always|withText"
+                android:visible="true" />
+
+            <item
+                android:id="@+id/sortByDateDescending"
+                android:title="Date Descending"
+                android:icon="@drawable/ic_arrow_downward_black_48dp"
+                app:showAsAction="always|withText"
+                android:visible="true" />
+
+            <item
+                android:id="@+id/sortAlphabeticallyAZ"
+                android:title="Alphabetical A-Z"
+                android:icon="@drawable/a_to_z"
+                app:showAsAction="always|withText"
+                android:visible="true" />
+
+            <item
+                android:id="@+id/sortAlphabeticallyZA"
+                android:title="Alphabetical Z-A"
+                android:icon="@drawable/z_to_a"
+                app:showAsAction="always|withText"
+                android:visible="true" />
+        </menu>
+    </item>
 
 </menu>

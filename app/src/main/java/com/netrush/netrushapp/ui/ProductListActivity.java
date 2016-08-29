@@ -2,11 +2,13 @@ package com.netrush.netrushapp.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.view.MenuItemCompat;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +39,6 @@ import okhttp3.Response;
 
 public class ProductListActivity extends AppCompatActivity implements View.OnClickListener{
     public final String TAG = this.getClass().getSimpleName();
-
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static ArrayList<String> mAsins = new ArrayList<>();
@@ -54,7 +55,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         StringBuilder profileBuilder = new StringBuilder();
         final String profile = profileBuilder.toString();
-        Log.v("userEmail", pref.getString("UserEmail", profile));
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
@@ -64,7 +64,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
         getOrders();
     }
-
     public static void setButtonVisibility(){
         if(mAsins.size() == 0){
             mCheckout.setVisibility(View.INVISIBLE);
@@ -130,6 +129,24 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.product_list_activity, menu);
+
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                    //TODO Search query results processed here
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -152,6 +169,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
