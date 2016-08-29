@@ -69,6 +69,4 @@ public class Order {
         this.imageUrl = imageUrl;
     }
 
-
-
 }

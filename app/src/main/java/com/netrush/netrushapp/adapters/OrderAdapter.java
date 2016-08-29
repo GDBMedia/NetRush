@@ -1,6 +1,7 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -30,8 +31,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
     private int itemNum = 1;
-
-
+    public Boolean itemInCart = false;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         mContext = context;
@@ -84,13 +84,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         @Override
         public void onClick(View view) {
-            int itemPosition = getLayoutPosition();
-            String itemKey = "Item." + itemNum + ".ASIN";
-            String quantKey = "Item." + itemNum + ".Quantity";
-            ProductListActivity.setButtonVisable();
-            itemNum++;
-            ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
-            ProductListActivity.mProducts.put(quantKey, "1");
+            if (!itemInCart) {
+                int itemPosition = getLayoutPosition();
+                String itemKey = "Item." + itemNum + ".ASIN";
+                String quantKey = "Item." + itemNum + ".Quantity";
+                ProductListActivity.setButtonVisable();
+                itemNum++;
+                ProductListActivity.mProducts.put(itemKey, mOrderArrayList.get(itemPosition).getAsin());
+                ProductListActivity.mProducts.put(quantKey, "1");
+                cv.setCardBackgroundColor(58);
+            } else {
+
+            }
         }
     }
 }

@@ -60,7 +60,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         StringBuilder profileBuilder = new StringBuilder();
         final String profile = profileBuilder.toString();
-        Log.v("userEmail", pref.getString("UserEmail", profile));
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mRecyclerview.setHasFixedSize(true);
@@ -69,12 +68,12 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     public static void setButtonVisable(){
-
         mCheckout.setVisibility(View.VISIBLE);
         int total = 0;
         for (String item : mProducts.values()) {
                 total++;
         }
+        Log.v("Products", mProducts.values().toString());
         mCheckout.setText("Checkout(" + total +")");
     }
 
@@ -131,7 +130,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                    //TODO Search query results processed here
                 return false;
             }
 
@@ -161,6 +160,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
