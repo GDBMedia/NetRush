@@ -137,18 +137,30 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                    //TODO Search query results processed here
+                searchProducts(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                searchProducts(newText);
                 return false;
             }
         });
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    private void searchProducts(String query) {
+        ArrayList<Order> searchResults = new ArrayList<>();
+        for (Order order : mOrders){
+            if (order.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                searchResults.add(order);
+            }
+        }
+        setAdapter(searchResults);
+    }
+
 
     @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -187,7 +199,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             products.put(quantKey, "1");
             itemNum++;
         }
-
 
         final AmazonService amazonService = new AmazonService();
         amazonService.createCart(products, new Callback() {
