@@ -62,6 +62,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
+        setButtonVisibility();
         getOrders();
     }
     public static void setButtonVisibility(){
