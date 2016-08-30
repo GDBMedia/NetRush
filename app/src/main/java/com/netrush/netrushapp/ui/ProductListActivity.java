@@ -2,6 +2,7 @@ package com.netrush.netrushapp.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
+import com.netrush.netrushapp.models.User;
 import com.netrush.netrushapp.services.AmazonService;
 
 import java.io.IOException;
@@ -46,6 +51,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private static Button mCheckout;
     private static RecyclerView mRecyclerview;
     private static RelativeLayout.LayoutParams layoutparams;
+    private String mUserId;
+    private SharedPreferences mSharedPreferences;
 
 
     @Override
@@ -53,9 +60,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
         ButterKnife.bind(this);
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        StringBuilder profileBuilder = new StringBuilder();
-        final String profile = profileBuilder.toString();
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProductListActivity.this);
+        mUserId = mSharedPreferences.getString("userId", null);
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
@@ -84,7 +90,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private void getOrders() {
         final AmazonService amazonService = new AmazonService();
-        amazonService.getOrders("1" , new Callback() {
+        amazonService.getOrders(mUserId , new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -92,14 +98,22 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onResponse(Call call, Response response){
-                mOrders = amazonService.proccssoders(response);
-                for(Order order : mOrders){
-                    Log.d(TAG, "onResponse: " + order.getUnitprice() );
-                    Log.d(TAG, "onResponse: " + order.getImageUrl());
-                }
+                final int code = amazonService.proccssResult(response);
+
+//                for(Order order : mOrders){
+//                    Log.d(TAG, "onResponse: " + order.getUnitprice() );
+//                    Log.d(TAG, "onResponse: " + order.getImageUrl());
+//                }
                 ProductListActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if(code == 3){
+                            Toast.makeText(ProductListActivity.this, "Save failed. :(", Toast.LENGTH_SHORT).show();
+                        }else if(code == 1){
+                            Toast.makeText(ProductListActivity.this, "Save success!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(ProductListActivity.this, "No Updated needed", Toast.LENGTH_SHORT).show();
+                        }
                         ArrayList<Order> orders = sortByDateNewestToOldest(mOrders);
                         setAdapter(orders);
                     }
@@ -229,12 +243,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
 
     private void logout() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("LoggedIn", false);
-        editor.apply();
-
+        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(ProductListActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

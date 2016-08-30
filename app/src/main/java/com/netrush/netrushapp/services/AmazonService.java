@@ -29,12 +29,13 @@ import okhttp3.Response;
  */
 public class AmazonService {
     public static final String TAG = "Backend";
-    public static void getOrders(String type, Callback callback){
+    public static void getOrders(String id, Callback callback){
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         HttpUrl.Builder  urlBuilder = HttpUrl.parse(Constants.GETORDERS).newBuilder();
-        urlBuilder.addQueryParameter(Constants.KEYQ,  Constants.KEY);
+        urlBuilder.addQueryParameter(Constants.KEYQ,  Constants.KEY)
+                  .addQueryParameter(Constants.ID,  id);
         String url = urlBuilder.build().toString();
 
         Request request= new Request.Builder()
@@ -45,20 +46,13 @@ public class AmazonService {
         call.enqueue(callback);
     }
 
-    public static ArrayList<Order> proccssoders(Response response){
-        ArrayList<Order> orders = new ArrayList<>();
+    public static int proccssResult(Response response){
+        int code = 1;
         try {
             String jsonData = response.body().string();
             if (response.isSuccessful()) {
-                JSONArray orderArray = new JSONArray(jsonData);
-                Gson gson = new Gson();
-                for(int i = 0; i< orderArray.length(); i++){
-                    JSONObject orderJSON = orderArray.getJSONObject(i);
-
-                    Order order = gson.fromJson(orderJSON.toString(), Order.class);
-                    orders.add(order);
-                }
-
+                JSONObject statusObj = new JSONObject(jsonData);
+                code = statusObj.getInt("code");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,7 +60,7 @@ public class AmazonService {
             e.printStackTrace();
         }
 
-        return orders;
+        return code;
     }
 
         public static void addToCart(String asin, String cartId, String hmac, Callback callback){
