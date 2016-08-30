@@ -71,6 +71,7 @@ public class LoginActivity extends Activity{
 //            setLoggingInState(true);
             Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
             startActivity(intent);
+            finish();
         }
         mLoginButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -173,6 +174,7 @@ public class LoginActivity extends Activity{
             if(mIsLoggedIn){
                 Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
                 startActivity(intent);
+                finish();
             }
             else{
                 mLoginButton.setVisibility(Button.VISIBLE);
