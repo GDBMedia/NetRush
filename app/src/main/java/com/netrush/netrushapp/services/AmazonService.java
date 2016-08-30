@@ -34,7 +34,7 @@ public class AmazonService {
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         HttpUrl.Builder  urlBuilder = HttpUrl.parse(Constants.GETORDERS).newBuilder();
-        urlBuilder.addQueryParameter(Constants.TYPE,  type);
+        urlBuilder.addQueryParameter(Constants.KEYQ,  Constants.KEY);
         String url = urlBuilder.build().toString();
 
         Request request= new Request.Builder()

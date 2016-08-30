@@ -11,4 +11,11 @@ public class Constants {
     public static final String AWS_SECRET_KEY = BuildConfig.AWS_SECRET_KEY;
     public static final String ASSOCIATE_TAG = BuildConfig.ASSOCIATE_TAG;
     public static final String ENDPOINT = "webservices.amazon.com";
+    public static final String ITEM = "Item.";
+    public static final String ASIN = ".ASIN";
+    public static final String QUANT = ".Quantity";
+    public static final String AMOUNT = "1";
+    public static final String KEY = BuildConfig.KEY;
+    public static final String KEYQ = "key";
+
 }

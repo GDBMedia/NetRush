@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
@@ -62,6 +63,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
+        setButtonVisibility();
         getOrders();
     }
     public static void setButtonVisibility(){
@@ -246,10 +248,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         Map<String, String> products = new HashMap<>();
         int itemNum = 1;
         for(String asin : mAsins){
-            String itemKey = "Item." + itemNum + ".ASIN";
-            String quantKey = "Item." + itemNum + ".Quantity";
+            String itemKey = Constants.ITEM + itemNum + Constants.ASIN;
+            String quantKey = Constants.ITEM + itemNum + Constants.QUANT;
             products.put(itemKey, asin);
-            products.put(quantKey, "1");
+            products.put(quantKey, Constants.AMOUNT);
             itemNum++;
         }
 
