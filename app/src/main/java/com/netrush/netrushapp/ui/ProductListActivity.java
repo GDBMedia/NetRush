@@ -1,5 +1,6 @@
 package com.netrush.netrushapp.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.view.MenuItemCompat;
@@ -14,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
@@ -47,15 +50,11 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private static RecyclerView mRecyclerview;
     private static RelativeLayout.LayoutParams layoutparams;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
         ButterKnife.bind(this);
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        StringBuilder profileBuilder = new StringBuilder();
-        final String profile = profileBuilder.toString();
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
@@ -63,6 +62,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
+
         setButtonVisibility();
         getOrders();
     }
@@ -157,6 +157,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 return object2.getTitle().compareTo(object1.getTitle());
             }
         } );
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left);
+        mRecyclerview.startAnimation(animation);
         return orders;
     }
 
