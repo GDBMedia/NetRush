@@ -36,6 +36,7 @@
     <string name="alphabetical_a_z">Alphabetical A-Z</string>
     <string name="oldest_to_newest">Oldest to Newest</string>
     <string name="newest_to_oldest">Newest to Oldest</string>
+    <string name="sort_by_most_purchased">Sort By Most Purchased</string>
 
     <integer name="swing_anim_time">1000</integer>
 

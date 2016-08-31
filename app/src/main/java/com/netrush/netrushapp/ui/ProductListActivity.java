@@ -83,7 +83,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mCheckout.setOnClickListener(this);
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
-        mRecyclerview.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         checkIfExists();
         setButtonVisibility();
         retrieveOrders();
@@ -192,6 +191,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setAdapter(ArrayList<Order> orders) {
+        mRecyclerview.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new OrderAdapter(ProductListActivity.this, orders);
         mRecyclerview.setAdapter(mAdapter);
     }
@@ -207,11 +207,18 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_right);
-        mRecyclerview.startAnimation(animation);
         return orders;
     }
 
+
+    private ArrayList<Order> sortByMostPurchased(ArrayList<Order> orders) {
+        Collections.sort(orders, new Comparator<Order>() {
+            @Override public int compare(Order p1, Order p2) {
+                return (Integer.valueOf(p2.getQuantity()) - (Integer.valueOf(p1.getQuantity())));
+            }
+        });
+        return orders;
+    }
     private ArrayList<Order> sortByDateOldestToNewest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
             DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
@@ -223,8 +230,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left);
-        mRecyclerview.startAnimation(animation);
         return orders;
     }
     private ArrayList<Order> sortAlphabeticallyAZ(ArrayList<Order> orders) {
@@ -234,8 +239,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 return object1.getTitle().compareTo(object2.getTitle());
             }
         } );
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_right);
-        mRecyclerview.startAnimation(animation);
         return orders;
     }
 
@@ -246,8 +249,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 return object2.getTitle().compareTo(object1.getTitle());
             }
         } );
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left);
-        mRecyclerview.startAnimation(animation);
         return orders;
     }
 
@@ -315,6 +316,11 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             case R.id.update:
                 getOrders();
                 break;
+            case R.id.sortByMostPurchased:
+                orders = sortByMostPurchased(mOrders);
+                setAdapter(orders);
+                break;
+
 
         }
         return super.onOptionsItemSelected(item);

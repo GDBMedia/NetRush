@@ -6,10 +6,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +36,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public Boolean itemInCart = false;
     private static final int TYPE_FULL = 0;
     private static final int TYPE_HALF = 1;
-    private static final int TYPE_QUARTER = 2;
+    private int lastPosition = -1;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         mContext = context;
@@ -49,8 +52,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 final int type = viewType;
                 final ViewGroup.LayoutParams lp = view.getLayoutParams();
                 if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-                    StaggeredGridLayoutManager.LayoutParams sglp =
-                            (StaggeredGridLayoutManager.LayoutParams) lp;
+                    StaggeredGridLayoutManager.LayoutParams sglp = (StaggeredGridLayoutManager.LayoutParams) lp;
                     switch (type) {
                         case TYPE_FULL:
                             sglp.setFullSpan(true);
@@ -61,8 +63,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                             break;
                     }
                     view.setLayoutParams(sglp);
-                    final StaggeredGridLayoutManager lm =
-                            (StaggeredGridLayoutManager) ((RecyclerView) parent).getLayoutManager();
+                    final StaggeredGridLayoutManager lm = (StaggeredGridLayoutManager) ((RecyclerView) parent).getLayoutManager();
                     lm.invalidateSpanAssignments();
                 }
                 view.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -76,6 +77,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(OrderAdapter.OrderViewHolder holder, int position) {
         holder.bindOrder(mOrderArrayList.get(position));
+        setAnimation(holder.cv, position);
+    }
+
+    private void setAnimation(CardView cv, int position) {
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.item_animate);
+            cv.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
