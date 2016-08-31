@@ -5,9 +5,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +31,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     private Context mContext;
     private int itemNum = 1;
     public Boolean itemInCart = false;
+    private static final int TYPE_FULL = 0;
+    private static final int TYPE_HALF = 1;
+    private static final int TYPE_QUARTER = 2;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         mContext = context;
@@ -36,8 +41,34 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     @Override
-    public OrderAdapter.OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+    public OrderAdapter.OrderViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                final int type = viewType;
+                final ViewGroup.LayoutParams lp = view.getLayoutParams();
+                if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+                    StaggeredGridLayoutManager.LayoutParams sglp =
+                            (StaggeredGridLayoutManager.LayoutParams) lp;
+                    switch (type) {
+                        case TYPE_FULL:
+                            sglp.setFullSpan(true);
+                            break;
+                        case TYPE_HALF:
+                            sglp.setFullSpan(false);
+                            sglp.width = view.getWidth();
+                            break;
+                    }
+                    view.setLayoutParams(sglp);
+                    final StaggeredGridLayoutManager lm =
+                            (StaggeredGridLayoutManager) ((RecyclerView) parent).getLayoutManager();
+                    lm.invalidateSpanAssignments();
+                }
+                view.getViewTreeObserver().removeOnPreDrawListener(this);
+                return true;
+            }
+        });
         OrderViewHolder viewHolder = new OrderViewHolder(view);
         return viewHolder;
     }
@@ -45,6 +76,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(OrderAdapter.OrderViewHolder holder, int position) {
         holder.bindOrder(mOrderArrayList.get(position));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        Order order = mOrderArrayList.get(position);
+        if(Integer.valueOf(order.getQuantity()) > 3){
+            return TYPE_FULL;
+        }
+        return TYPE_HALF;
+
     }
 
     @Override
@@ -89,8 +130,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 setUnClicked();
             }
             String title = order.getTitle();
-            if(order.getTitle().length() > 30){
-                title = order.getTitle().substring(0, 30) + mContext.getString(R.string.elip);
+            int cutoff = 20;
+            if(order.getTitle().length() > cutoff){
+                title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
             }
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
