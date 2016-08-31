@@ -23,6 +23,13 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
@@ -56,6 +63,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private static RelativeLayout.LayoutParams layoutparams;
     private String mUserId;
     private SharedPreferences mSharedPreferences;
+    private DatabaseReference mDatabase;
+    private ChildEventListener mChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +77,35 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         mCheckout = (Button) findViewById(R.id.checkoutButton);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mCheckout.setOnClickListener(this);
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(ProductListActivity.this));
-
+        checkIfExists();
         setButtonVisibility();
-        getOrders();
+        retrieveOrders();
     }
+
+    private void checkIfExists() {
+        Query query = FirebaseDatabase.getInstance().getReference("users/" + mUserId);
+        query.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "onDataChange: " + dataSnapshot.getValue());
+                        if(dataSnapshot.getValue() == null){
+                            getOrders();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                    }
+                });
+    }
+
     public static void setButtonVisibility(){
         if(mAsins.size() == 0){
             mCheckout.setVisibility(View.INVISIBLE);
@@ -92,6 +122,43 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mRecyclerview.setLayoutParams(layoutparams);
     }
 
+    private void retrieveOrders() {
+        Query query = FirebaseDatabase.getInstance().getReference("users/" + mUserId +"/data");
+        mChildEventListener = query.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("onChildAdded: " ,dataSnapshot.getValue().toString());
+                mOrders.add(dataSnapshot.getValue(Order.class));
+                ArrayList<Order> orders = sortByDateNewestToOldest(mOrders);
+                setAdapter(orders);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildChanged: ");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved: ");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildMoved: ");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: ");
+            }
+        });
+
+
+    }
+
     private void getOrders() {
         final AmazonService amazonService = new AmazonService();
         amazonService.getOrders(mUserId , new Callback() {
@@ -103,11 +170,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onResponse(Call call, Response response){
                 final int code = amazonService.proccssResult(response);
-
-//                for(Order order : mOrders){
-//                    Log.d(TAG, "onResponse: " + order.getUnitprice() );
-//                    Log.d(TAG, "onResponse: " + order.getImageUrl());
-//                }
                 ProductListActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -124,6 +186,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 });
             }
         });
+
     }
 
     private void setAdapter(ArrayList<Order> orders) {
