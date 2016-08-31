@@ -57,8 +57,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
-//        mProductDetailImage = (ImageView) findViewById(R.id.productDetailImage);
-        @Bind(R.id.productDetailImage) ImageView mProductDetailImage;
         private Context mContext;
 
         public OrderViewHolder(View itemView) {
@@ -81,7 +79,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     alert.setView(productDetails);
                     alert.setCancelable(true);
                     final AlertDialog dialog = alert.create();
-//                    Picasso.with(mContext).load(order.getImageUrl()).into(mProductDetailImage);
                     dialog.show();
                     return false;
                 }
