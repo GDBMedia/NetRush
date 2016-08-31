@@ -37,6 +37,6 @@
     <string name="oldest_to_newest">Oldest to Newest</string>
     <string name="newest_to_oldest">Newest to Oldest</string>
 
-    <integer name="swing_anim_time">750</integer>
+    <integer name="swing_anim_time">1000</integer>
 
 </resources>
