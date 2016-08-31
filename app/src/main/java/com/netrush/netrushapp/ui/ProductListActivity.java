@@ -228,6 +228,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 return object1.getTitle().compareTo(object2.getTitle());
             }
         } );
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_right);
+        mRecyclerview.startAnimation(animation);
         return orders;
     }
 
