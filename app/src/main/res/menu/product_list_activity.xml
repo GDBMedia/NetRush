@@ -10,36 +10,42 @@
         <menu>
             <item
                 android:id="@+id/logout"
-                android:title="Logout"
+                android:title="@string/logout"
                 android:visible="true"
                 android:icon="@drawable/logout_icon"
                 app:showAsAction="always|withText" />
 
             <item
                 android:id="@+id/sortByDateNewestToOldest"
-                android:title="Newest to Oldest"
+                android:title="@string/newest_to_oldest"
                 android:icon="@drawable/ic_arrow_downward_black_48dp"
                 app:showAsAction="always|withText"
                 android:visible="true" />
 
             <item
                 android:id="@+id/sortByDateOldestToNewest"
-                android:title="Oldest to Newest"
+                android:title="@string/oldest_to_newest"
                 android:icon="@drawable/ic_arrow_upward_black_48dp"
                 app:showAsAction="always|withText"
                 android:visible="true" />
 
             <item
                 android:id="@+id/sortAlphabeticallyAZ"
-                android:title="Alphabetical A-Z"
+                android:title="@string/alphabetical_a_z"
                 android:icon="@drawable/a_to_z"
                 app:showAsAction="always|withText"
                 android:visible="true" />
 
             <item
                 android:id="@+id/sortAlphabeticallyZA"
-                android:title="Alphabetical Z-A"
+                android:title="@string/alphabetical_z_a"
                 android:icon="@drawable/z_to_a"
+                app:showAsAction="always|withText"
+                android:visible="true" />
+            <item
+                android:id="@+id/update"
+                android:title="@string/update_"
+                android:icon="@drawable/ic_action_update"
                 app:showAsAction="always|withText"
                 android:visible="true" />
         </menu>

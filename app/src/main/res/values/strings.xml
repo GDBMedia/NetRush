@@ -31,6 +31,11 @@
     <string name="already_have_an_account_log_in_here">Already have an account? Log in here!</string>
     <string name="create_account">Create Account</string>
     <string name="don_t_have_an_account_sign_up_here">Don\'t have an account? Sign up here!</string>
+    <string name="update_">Update</string>
+    <string name="alphabetical_z_a">Alphabetical Z-A</string>
+    <string name="alphabetical_a_z">Alphabetical A-Z</string>
+    <string name="oldest_to_newest">Oldest to Newest</string>
+    <string name="newest_to_oldest">Newest to Oldest</string>
 
     <integer name="swing_anim_time">750</integer>
 

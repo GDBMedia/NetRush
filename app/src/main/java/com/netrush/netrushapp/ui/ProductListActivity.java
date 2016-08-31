@@ -306,6 +306,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 orders = sortAlphabeticallyZA(mOrders);
                 setAdapter(orders);
                 break;
+            case R.id.update:
+                getOrders();
+                break;
 
         }
         return super.onOptionsItemSelected(item);
