@@ -109,6 +109,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
+
         private Context mContext;
 
         public OrderViewHolder(View itemView) {
@@ -157,6 +158,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         private void setClicked() {
+            mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mdate.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));

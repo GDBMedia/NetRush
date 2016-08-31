@@ -181,8 +181,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         }else{
                             Toast.makeText(ProductListActivity.this, "No Updated needed", Toast.LENGTH_SHORT).show();
                         }
-                        ArrayList<Order> orders = (mOrders);
-                        setAdapter(orders);
                     }
                 });
             }
