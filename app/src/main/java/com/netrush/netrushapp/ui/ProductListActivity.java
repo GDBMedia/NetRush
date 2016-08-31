@@ -180,7 +180,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         }else{
                             Toast.makeText(ProductListActivity.this, "No Updated needed", Toast.LENGTH_SHORT).show();
                         }
-                        ArrayList<Order> orders = sortByDateNewestToOldest(mOrders);
+                        ArrayList<Order> orders = (mOrders);
                         setAdapter(orders);
                     }
                 });
@@ -205,6 +205,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_right);
+        mRecyclerview.startAnimation(animation);
         return orders;
     }
 
@@ -219,6 +221,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left);
+        mRecyclerview.startAnimation(animation);
         return orders;
     }
     private ArrayList<Order> sortAlphabeticallyAZ(ArrayList<Order> orders) {
