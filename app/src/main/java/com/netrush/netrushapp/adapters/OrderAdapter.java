@@ -1,14 +1,14 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,7 +57,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
-
+//        mProductDetailImage = (ImageView) findViewById(R.id.productDetailImage);
+        @Bind(R.id.productDetailImage) ImageView mProductDetailImage;
         private Context mContext;
 
         public OrderViewHolder(View itemView) {
@@ -69,7 +70,22 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         public void bindOrder(Order order) {
-            int itemPosition = getLayoutPosition();
+            final int itemPosition = getLayoutPosition();
+
+            cv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    final View productDetails = inflater.inflate(R.layout.product_details, null);
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                    alert.setView(productDetails);
+                    alert.setCancelable(true);
+                    final AlertDialog dialog = alert.create();
+//                    Picasso.with(mContext).load(order.getImageUrl()).into(mProductDetailImage);
+                    dialog.show();
+                    return false;
+                }
+            });
             if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
                 setClicked();
             }else{
@@ -82,7 +98,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
             mdate.setText(mContext.getString(R.string.last_ordered) + order.getDate());
-
         }
 
         private void setUnClicked() {
