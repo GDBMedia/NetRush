@@ -18,5 +18,7 @@ public class Constants {
     public static final String KEY = BuildConfig.KEY;
     public static final String KEYQ = "key";
     public static final String ID = "id";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String ORDER_NUMQ = "orderNum";
 
 }

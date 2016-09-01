@@ -29,13 +29,14 @@ import okhttp3.Response;
  */
 public class AmazonService {
     public static final String TAG = "Backend";
-    public static void getOrders(String id, Callback callback){
+    public static void getOrders(String id, String orderNum, Callback callback){
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         HttpUrl.Builder  urlBuilder = HttpUrl.parse(Constants.GETORDERS).newBuilder();
         urlBuilder.addQueryParameter(Constants.KEYQ,  Constants.KEY)
-                  .addQueryParameter(Constants.ID,  id);
+                  .addQueryParameter(Constants.ID,  id)
+                  .addQueryParameter(Constants.ORDER_NUMQ, orderNum);
         String url = urlBuilder.build().toString();
 
         Request request= new Request.Builder()

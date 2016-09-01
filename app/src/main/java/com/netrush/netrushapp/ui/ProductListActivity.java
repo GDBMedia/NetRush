@@ -67,11 +67,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private SharedPreferences mSharedPreferences;
     private DatabaseReference mDatabase;
     private ChildEventListener mChildEventListener;
+    private String mOrderNum;
+    private static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+        mContext = this;
         ButterKnife.bind(this);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProductListActivity.this);
@@ -83,9 +86,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mCheckout.setOnClickListener(this);
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
+        mOrderNum = "123456";
         checkIfExists();
         setButtonVisibility();
         retrieveOrders();
+    }
+
+    public static Context getContext(){
+        return mContext;
     }
 
     private void checkIfExists() {
@@ -114,7 +122,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         }else {
             setRecyclerBottomMargin(mCheckout.getHeight());
             mCheckout.setVisibility(View.VISIBLE);
-            mCheckout.setText("Checkout(" + mAsins.size() + ")");
+            mCheckout.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
         }
     }
 
@@ -131,7 +139,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d("onChildAdded: " ,dataSnapshot.getValue().toString());
                 mOrders.add(dataSnapshot.getValue(Order.class));
-                ArrayList<Order> orders = sortByDateNewestToOldest(mOrders);
+                ArrayList<Order> orders = sortByMostPurchased(mOrders);
                 setAdapter(orders);
 
             }
@@ -162,7 +170,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private void getOrders() {
         final AmazonService amazonService = new AmazonService();
-        amazonService.getOrders(mUserId , new Callback() {
+        amazonService.getOrders(mUserId , mOrderNum, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -175,14 +183,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void run() {
                         if(code == 3){
-                            Toast.makeText(ProductListActivity.this, "Save failed. :(", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductListActivity.this, R.string.save_failed, Toast.LENGTH_SHORT).show();
                         }else if(code == 1){
-                            Toast.makeText(ProductListActivity.this, "Save success!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductListActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(ProductListActivity.this, "No Updated needed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductListActivity.this, R.string.no_update, Toast.LENGTH_SHORT).show();
                         }
-                        ArrayList<Order> orders = (mOrders);
-                        setAdapter(orders);
+
                     }
                 });
             }
@@ -198,7 +205,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> sortByDateNewestToOldest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT);
             @Override public int compare(Order o1, Order o2) {
                 try {
                     return f.parse(o2.getDate()).compareTo(f.parse(o1.getDate()));
@@ -221,7 +228,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
     private ArrayList<Order> sortByDateOldestToNewest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT);
             @Override public int compare(Order o1, Order o2) {
                 try {
                     return f.parse(o1.getDate()).compareTo(f.parse(o2.getDate()));
