@@ -33,8 +33,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
-    private int itemNum = 1;
-    public Boolean itemInCart = false;
     private static final int TYPE_FULL = 0;
     private static final int TYPE_HALF = 1;
     private int lastPosition = -1;
@@ -175,12 +173,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         private void setUnClicked() {
+            ProductListActivity.setButtonVisibility(0);
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
             mdate.setTextColor(ContextCompat.getColor(mContext, R.color.divider));
         }
 
         private void setClicked() {
+            ProductListActivity.setButtonVisibility(1);
             mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
@@ -191,14 +191,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         public void onClick(View view) {
             int itemPosition = getLayoutPosition();
             if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
-               setUnClicked();
                 ProductListActivity.mAsins.remove( mOrderArrayList.get(itemPosition).getAsin());
+                setUnClicked();
             }else{
-                setClicked();
                 ProductListActivity.mAsins.add( mOrderArrayList.get(itemPosition).getAsin());
+                setClicked();
             }
 
-            ProductListActivity.setButtonVisibility();
+
 
         }
     }

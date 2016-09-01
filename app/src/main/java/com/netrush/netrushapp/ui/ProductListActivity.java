@@ -60,7 +60,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static ArrayList<String> mAsins = new ArrayList<>();
-    private static Button mCheckout;
+    private static Button mCheckoutButton;
     private static RecyclerView mRecyclerview;
     private static RelativeLayout.LayoutParams layoutparams;
     private String mUserId;
@@ -80,15 +80,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProductListActivity.this);
         mUserId = mSharedPreferences.getString("userId", null);
 
-        mCheckout = (Button) findViewById(R.id.checkoutButton);
+        mCheckoutButton = (Button) findViewById(R.id.checkout);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mCheckout.setOnClickListener(this);
+        mCheckoutButton.setOnClickListener(this);
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mOrderNum = "123456";
         checkIfExists();
-        setButtonVisibility();
         retrieveOrders();
     }
 
@@ -115,14 +114,50 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 });
     }
 
-    public static void setButtonVisibility(){
-        if(mAsins.size() == 0){
-            mCheckout.setVisibility(View.INVISIBLE);
+    public static void setButtonVisibility(int fadeType){
+        if(mAsins.size() == 0 && fadeType == 0){
+            Animation fadeOut = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
+            fadeOut.setAnimationListener(new Animation.AnimationListener(){
+
+                @Override
+                public void onAnimationStart(Animation animation){}
+
+                @Override
+                public void onAnimationRepeat(Animation animation){}
+
+                @Override
+                public void onAnimationEnd(Animation animation){
+                    mCheckoutButton.setVisibility(View.INVISIBLE);
+
+                }
+            });
+            mCheckoutButton.startAnimation(fadeOut);
             setRecyclerBottomMargin(0);
+
+        }else if(mAsins.size() == 1 && fadeType == 1) {
+
+            Animation fadeIn = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+            fadeIn.setAnimationListener(new Animation.AnimationListener(){
+
+                @Override
+                public void onAnimationStart(Animation animation){
+                    mCheckoutButton.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation){}
+
+                @Override
+                public void onAnimationEnd(Animation animation){
+
+                    setRecyclerBottomMargin(mCheckoutButton.getHeight());
+
+                }
+            });
+            mCheckoutButton.startAnimation(fadeIn);
+            mCheckoutButton.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
         }else {
-            setRecyclerBottomMargin(mCheckout.getHeight());
-            mCheckout.setVisibility(View.VISIBLE);
-            mCheckout.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
+            mCheckoutButton.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
         }
     }
 
