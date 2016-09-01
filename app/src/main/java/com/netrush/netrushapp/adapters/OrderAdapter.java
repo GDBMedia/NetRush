@@ -1,6 +1,7 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -114,6 +115,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
+        private ImageView mProductDetailImage;
+
         private Context mContext;
         private int mViewType;
 
@@ -125,7 +128,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             cv.setOnClickListener(this);
         }
 
-        public void bindOrder(Order order) {
+        public void bindOrder(final Order order) {
             final int itemPosition = getLayoutPosition();
             int cutoff;
             switch (mViewType){
@@ -145,9 +148,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     final View productDetails = inflater.inflate(R.layout.product_details, null);
                     final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                    mProductDetailImage = (ImageView) productDetails.findViewById(R.id.productDetailImage);
+
+                    Picasso.with(mContext).load(order.getImageUrl()).into(mProductDetailImage);
                     alert.setView(productDetails);
                     alert.setCancelable(true);
                     final AlertDialog dialog = alert.create();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialog.show();
                     return false;
                 }
@@ -173,6 +181,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         private void setClicked() {
+            mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mdate.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));

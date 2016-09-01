@@ -189,7 +189,6 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         }else{
                             Toast.makeText(ProductListActivity.this, R.string.no_update, Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
             }
