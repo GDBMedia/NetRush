@@ -60,6 +60,5 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.0.2'
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
     compile group: 'commons-codec', name: 'commons-codec', version: '1.5'
-
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,6 +1,7 @@
 package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -109,6 +110,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
+        @Bind(R.id.productDetailImage) ImageView mProductDetailImage;
 
         private Context mContext;
 
@@ -120,7 +122,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             cv.setOnClickListener(this);
         }
 
-        public void bindOrder(Order order) {
+        public void bindOrder(final Order order) {
             final int itemPosition = getLayoutPosition();
 
             cv.setOnLongClickListener(new View.OnLongClickListener() {
@@ -129,9 +131,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     final View productDetails = inflater.inflate(R.layout.product_details, null);
                     final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+
+                    Picasso.with(mContext).load(order.getImageUrl()).into(mProductDetailImage);
                     alert.setView(productDetails);
                     alert.setCancelable(true);
                     final AlertDialog dialog = alert.create();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialog.show();
                     return false;
                 }
