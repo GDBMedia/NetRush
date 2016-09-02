@@ -7,20 +7,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
 import com.netrush.netrushapp.ui.ProductListActivity;
+import com.netrush.netrushapp.utils.DateFormatter;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import butterknife.Bind;
@@ -35,7 +36,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     private Context mContext;
     private static final int TYPE_FULL = 0;
     private static final int TYPE_HALF = 1;
-    private int lastPosition = -1;
+    private int mLastPosition = -1;
+    private int mFullCardCount = 0;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         mContext = context;
@@ -44,12 +46,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     @Override
     public OrderAdapter.OrderViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        final int[] cutoff = {20};
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                int length = 20;
                 final int type = viewType;
                 final ViewGroup.LayoutParams lp = view.getLayoutParams();
                 if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
@@ -57,19 +57,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     switch (type) {
                         case TYPE_FULL:
                             sglp.setFullSpan(true);
-                            length = 30;
                             break;
                         case TYPE_HALF:
                             sglp.setFullSpan(false);
                             sglp.width = view.getWidth();
-                            length = 20;
                             break;
                     }
                     view.setLayoutParams(sglp);
                     final StaggeredGridLayoutManager lm = (StaggeredGridLayoutManager) ((RecyclerView) parent).getLayoutManager();
                     lm.invalidateSpanAssignments();
                 }
-                cutoff[0] = length;
                 view.getViewTreeObserver().removeOnPreDrawListener(this);
                 return true;
             }
@@ -85,11 +82,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     private void setAnimation(CardView cv, int position) {
-        if (position > lastPosition)
+        if (position > mLastPosition)
         {
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.item_animate);
             cv.startAnimation(animation);
-            lastPosition = position;
+            mLastPosition = position;
         }
     }
 
@@ -114,6 +111,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
         private ImageView mProductDetailImage;
+        private final int itemMargin;
+        private final int itemMarginHalf;
+        private LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         private Context mContext;
         private int mViewType;
@@ -124,16 +124,24 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             mViewType = viewType;
             mContext = itemView.getContext();
             cv.setOnClickListener(this);
+            int itemMarginValue = (int) mContext.getResources().getDimension(R.dimen.itemMargin);
+            itemMargin = itemMarginValue;
+            itemMarginHalf = itemMarginValue/2;
         }
 
         public void bindOrder(final Order order) {
-            final int itemPosition = getLayoutPosition();
+            int itemPosition = getLayoutPosition();
             int cutoff;
+
             switch (mViewType){
                 case TYPE_FULL:
+                    mFullCardCount++;
+                    setFullCard(itemPosition);
                     cutoff = 35;
                     break;
                 case TYPE_HALF:
+                    int visualitemPosition = itemPosition+ mFullCardCount;
+                    setHalfCard(visualitemPosition);
                     cutoff = 20;
                     break;
                 default:
@@ -160,16 +168,65 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             });
             if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
                 setClicked();
-            }else{
-                setUnClicked();
             }
+//            else{
+//                setUnClicked();
+//            }
             String title = order.getTitle();
             if(order.getTitle().length() > cutoff){
                 title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
             }
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
-            mdate.setText(mContext.getString(R.string.last_ordered) + order.getDate());
+            mdate.setText(mContext.getString(R.string.last_ordered) + DateFormatter.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
+        }
+
+        private void setHalfCard(int visualitemPosition) {
+            if(visualitemPosition%2 == 0){
+                setLeftCard(visualitemPosition);
+            }else{
+                setRightCard(visualitemPosition);
+            }
+        }
+
+        private void setFullCard(int itemPosition) {
+            if (itemPosition == 0){
+                layoutParams.setMargins(itemMargin, itemMargin, itemMargin, itemMarginHalf);
+                cv.setLayoutParams(layoutParams);
+            }else if(itemPosition == mOrderArrayList.size()-1){
+                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMargin);
+                cv.setLayoutParams(layoutParams);
+            }else{
+                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMarginHalf);
+                cv.setLayoutParams(layoutParams);
+            }
+        }
+
+        private void setRightCard(int itemPosition) {
+            if(itemPosition == 0){
+                layoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
+                cv.setLayoutParams(layoutParams);
+            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
+                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMargin);
+                cv.setLayoutParams(layoutParams);
+            }else{
+                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMarginHalf);
+                cv.setLayoutParams(layoutParams);
+            }
+        }
+
+        private void setLeftCard(int itemPosition) {
+            if(itemPosition == 0){
+                layoutParams.setMargins(itemMargin, itemMargin, itemMarginHalf, itemMarginHalf);
+                cv.setLayoutParams(layoutParams);
+            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
+                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMargin);
+                cv.setLayoutParams(layoutParams);
+            }else{
+                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMarginHalf);
+                cv.setLayoutParams(layoutParams);
+            }
+
         }
 
         private void setUnClicked() {

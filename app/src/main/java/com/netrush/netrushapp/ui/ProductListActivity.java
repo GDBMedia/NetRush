@@ -8,8 +8,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -32,12 +30,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
-import com.netrush.netrushapp.models.User;
 import com.netrush.netrushapp.services.AmazonService;
 
 import java.io.IOException;
@@ -239,7 +235,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> sortByDateNewestToOldest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
-            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT);
+            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT_SOURCE);
             @Override public int compare(Order o1, Order o2) {
                 try {
                     return f.parse(o2.getDate()).compareTo(f.parse(o1.getDate()));
@@ -262,7 +258,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
     private ArrayList<Order> sortByDateOldestToNewest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
-            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT);
+            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT_SOURCE);
             @Override public int compare(Order o1, Order o2) {
                 try {
                     return f.parse(o1.getDate()).compareTo(f.parse(o2.getDate()));

@@ -41,6 +41,7 @@
     <string name="save_success">Save success!</string>
     <string name="no_update">No Updated needed</string>
     <string name="checkout">Checkout(</string>
+    <string name="today">Today</string>
 
     <integer name="swing_anim_time">1000</integer>
 
