@@ -36,15 +36,6 @@
                 android:src="@drawable/amazon"
                 android:scaleType="centerInside" />
 
-            <TextView
-                android:id="@+id/dateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/productimg"
-                android:layout_margin="5dp"
-                android:textColor="@color/divider"
-                android:text="Last Order Date"/>
-
         </RelativeLayout>
 
 

@@ -21,7 +21,8 @@ import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
 import com.netrush.netrushapp.ui.ProductListActivity;
-import com.netrush.netrushapp.utils.DateFormatter;
+import com.netrush.netrushapp.utils.DateHelper;
+import com.netrush.netrushapp.utils.MarginHelpers;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -111,13 +112,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @Bind(R.id.card_view) CardView cv;
         @Bind(R.id.titleTextView) TextView mTitle;
-        @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
         private ImageView mProductDetailImage;
         private TextView mLastPurchaseDate;
         private TextView mCurrentPriceDisplay;
         private final int itemMargin;
-        private final int itemMarginHalf;
         private LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         private Context mContext;
@@ -129,9 +128,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             mViewType = viewType;
             mContext = itemView.getContext();
             cv.setOnClickListener(this);
-            int itemMarginValue = (int) mContext.getResources().getDimension(R.dimen.itemMargin);
-            itemMargin = itemMarginValue;
-            itemMarginHalf = itemMarginValue/2;
+            itemMargin = (int) mContext.getResources().getDimension(R.dimen.itemMargin);
         }
 
         public void bindOrder(final Order order) {
@@ -141,18 +138,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             switch (mViewType){
                 case TYPE_FULL:
                     mFullCardCount++;
-                    setFullCard(itemPosition);
+//                    setFullCard(itemPosition);
                     cutoff = 35;
                     break;
                 case TYPE_HALF:
-                    int visualitemPosition = itemPosition+ mFullCardCount;
-                    setHalfCard(visualitemPosition);
+//                    int visualitemPosition = itemPosition+ mFullCardCount;
+//                    setHalfCard(visualitemPosition);
                     cutoff = 20;
                     break;
                 default:
                     cutoff = 20;
                     break;
             }
+            cv.setLayoutParams(MarginHelpers.setMarginOfStaggeredCards(layoutParams,mViewType,itemPosition,mFullCardCount,mOrderArrayList.size(),itemMargin));
             cv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -190,62 +188,60 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
-            mdate.setText(mContext.getString(R.string.last_ordered) + DateFormatter.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
         }
 
-        private void setHalfCard(int visualitemPosition) {
-            if(visualitemPosition%2 == 0){
-                setLeftCard(visualitemPosition);
-            }else{
-                setRightCard(visualitemPosition);
-            }
-        }
-
-        private void setFullCard(int itemPosition) {
-            if (itemPosition == 0){
-                layoutParams.setMargins(itemMargin, itemMargin, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }else if(itemPosition == mOrderArrayList.size()-1){
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMargin);
-                cv.setLayoutParams(layoutParams);
-            }else{
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }
-        }
-
-        private void setRightCard(int itemPosition) {
-            if(itemPosition == 0){
-                layoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
-                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMargin);
-                cv.setLayoutParams(layoutParams);
-            }else{
-                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }
-        }
-
-        private void setLeftCard(int itemPosition) {
-            if(itemPosition == 0){
-                layoutParams.setMargins(itemMargin, itemMargin, itemMarginHalf, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMargin);
-                cv.setLayoutParams(layoutParams);
-            }else{
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }
-
-        }
+//        private void setHalfCard(int visualitemPosition) {
+//            if(visualitemPosition%2 == 0){
+//                setLeftCard(visualitemPosition);
+//            }else{
+//                setRightCard(visualitemPosition);
+//            }
+//        }
+//
+//        private void setFullCard(int itemPosition) {
+//            if (itemPosition == 0){
+//                layoutParams.setMargins(itemMargin, itemMargin, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }else if(itemPosition == mOrderArrayList.size()-1){
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMargin);
+//                cv.setLayoutParams(layoutParams);
+//            }else{
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }
+//        }
+//
+//        private void setRightCard(int itemPosition) {
+//            if(itemPosition == 0){
+//                layoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
+//                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMargin);
+//                cv.setLayoutParams(layoutParams);
+//            }else{
+//                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }
+//        }
+//
+//        private void setLeftCard(int itemPosition) {
+//            if(itemPosition == 0){
+//                layoutParams.setMargins(itemMargin, itemMargin, itemMarginHalf, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMargin);
+//                cv.setLayoutParams(layoutParams);
+//            }else{
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }
+//
+//        }
 
         private void setUnClicked() {
             ProductListActivity.setButtonVisibility(0);
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
-            mdate.setTextColor(ContextCompat.getColor(mContext, R.color.divider));
         }
 
         private void setClicked() {
@@ -253,7 +249,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
-            mdate.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
 
         @Override

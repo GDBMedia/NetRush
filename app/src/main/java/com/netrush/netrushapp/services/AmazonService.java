@@ -50,7 +50,9 @@ public class AmazonService {
     public static int proccssResult(Response response){
         int code = 1;
         try {
+
             String jsonData = response.body().string();
+            Log.d(TAG, "proccssResult: " + jsonData);
             if (response.isSuccessful()) {
                 JSONObject statusObj = new JSONObject(jsonData);
                 code = statusObj.getInt("code");
