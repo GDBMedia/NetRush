@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -190,6 +191,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG, "onChildChanged: ");
+                final Order order = dataSnapshot.getValue(Order.class);
+                for(Iterator<Order> iterator = mOrders.iterator(); iterator.hasNext(); ) {
+                    if(iterator.next().getAsin().equals(order.getAsin()))
+                        iterator.remove();
+                }
+                mOrders.add(dataSnapshot.getValue(Order.class));
+                ArrayList<Order> orders = sortByMostPurchased(mOrders);
+                setAdapter(orders);
             }
 
             @Override

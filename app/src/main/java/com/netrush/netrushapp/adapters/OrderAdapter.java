@@ -109,11 +109,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @Bind(R.id.card_view) CardView cv;
         @Bind(R.id.titleTextView) TextView mTitle;
-        @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
         private ImageView mProductDetailImage;
         private final int itemMargin;
-        private final int itemMarginHalf;
         private LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         private Context mContext;
@@ -125,9 +123,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             mViewType = viewType;
             mContext = itemView.getContext();
             cv.setOnClickListener(this);
-            int itemMarginValue = (int) mContext.getResources().getDimension(R.dimen.itemMargin);
-            itemMargin = itemMarginValue;
-            itemMarginHalf = itemMarginValue/2;
+            itemMargin = (int) mContext.getResources().getDimension(R.dimen.itemMargin);
         }
 
         public void bindOrder(final Order order) {
@@ -180,7 +176,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
-            mdate.setText(mContext.getString(R.string.last_ordered) + DateHelper.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
         }
 
 //        private void setHalfCard(int visualitemPosition) {
@@ -235,7 +230,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             ProductListActivity.setButtonVisibility(0);
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
-            mdate.setTextColor(ContextCompat.getColor(mContext, R.color.divider));
         }
 
         private void setClicked() {
@@ -243,7 +237,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
-            mdate.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
 
         @Override

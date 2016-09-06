@@ -57,7 +57,7 @@ public class MarginHelpers {
     }
 
     private static LinearLayout.LayoutParams setRightCard(int itemPosition) {
-        if(itemPosition == 0){
+        if(itemPosition == 1){
             mLayoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
             return mLayoutParams;
         }else if(itemPosition == mArraySize+ mFullCardCount -1){
