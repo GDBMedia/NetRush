@@ -374,9 +374,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onClick(View view) {
-        createCart();
-    }
+    public void onClick(View view) {createCart();}
 
     private void createCart() {
         Map<String, String> products = new HashMap<>();

@@ -23,6 +23,9 @@ import com.netrush.netrushapp.models.Order;
 import com.netrush.netrushapp.ui.ProductListActivity;
 import com.netrush.netrushapp.utils.DateFormatter;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -111,6 +114,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @Bind(R.id.dateTextView) TextView mdate;
         @Bind(R.id.productimg) ImageView mImage;
         private ImageView mProductDetailImage;
+        private TextView mLastPurchaseDate;
+        private TextView mCurrentPriceDisplay;
         private final int itemMargin;
         private final int itemMarginHalf;
         private LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -154,9 +159,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     final View productDetails = inflater.inflate(R.layout.product_details, null);
                     final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                    mProductDetailImage = (ImageView) productDetails.findViewById(R.id.productDetailImage);
+                    String unitPrice = Double.toString(order.getUnitprice());
 
+                    mProductDetailImage = (ImageView) productDetails.findViewById(R.id.productDetailImage);
+                    mLastPurchaseDate = (TextView) productDetails.findViewById(R.id.lastPurchasedDateDisplay);
+                    mCurrentPriceDisplay = (TextView) productDetails.findViewById(R.id.currentPriceDisplay);
                     Picasso.with(mContext).load(order.getImageUrl()).into(mProductDetailImage);
+                    mProductDetailImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
+                    mLastPurchaseDate.setText(order.getDate());
+                    mCurrentPriceDisplay.setText("$" + unitPrice);
+
                     alert.setView(productDetails);
                     alert.setCancelable(true);
                     final AlertDialog dialog = alert.create();
