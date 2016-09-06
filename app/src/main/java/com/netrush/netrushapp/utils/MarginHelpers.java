@@ -3,6 +3,9 @@ package com.netrush.netrushapp.utils;
 import android.widget.LinearLayout;
 
 import com.netrush.netrushapp.R;
+import com.netrush.netrushapp.adapters.OrderAdapter;
+import com.netrush.netrushapp.ui.ProductListActivity;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Garrett on 9/6/2016.

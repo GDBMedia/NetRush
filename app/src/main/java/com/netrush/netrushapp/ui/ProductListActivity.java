@@ -110,7 +110,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         } else{
                             double timeStamp = Double.valueOf(dataSnapshot.child("pushData").child("timeStamp").getValue().toString());
                             if(DateHelper.getDiffInDays(timeStamp) > 1){
-                                Toast.makeText(ProductListActivity.this, "Been More than 24 Hours updating", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductListActivity.this, "Been More than 24 Hours, updating", Toast.LENGTH_SHORT).show();
                                 getOrders();
                             }
                         }
@@ -356,7 +356,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 logout();
                 break;
             case R.id.sortByDateNewestToOldest:
-                 orders = sortByDateNewestToOldest(mOrders);
+                orders = sortByDateNewestToOldest(mOrders);
                 setAdapter(orders);
                 break;
             case R.id.sortByDateOldestToNewest:

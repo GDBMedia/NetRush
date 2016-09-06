@@ -101,7 +101,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             return TYPE_FULL;
         }
         return TYPE_HALF;
-
     }
 
     @Override
@@ -138,10 +137,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             switch (mViewType){
                 case TYPE_FULL:
                     mFullCardCount++;
+                    Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mImage);
 //                    setFullCard(itemPosition);
                     cutoff = 35;
                     break;
                 case TYPE_HALF:
+                    Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
 //                    int visualitemPosition = itemPosition+ mFullCardCount;
 //                    setHalfCard(visualitemPosition);
                     cutoff = 20;
@@ -162,7 +163,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     mProductDetailImage = (ImageView) productDetails.findViewById(R.id.productDetailImage);
                     mLastPurchaseDate = (TextView) productDetails.findViewById(R.id.lastPurchasedDateDisplay);
                     mCurrentPriceDisplay = (TextView) productDetails.findViewById(R.id.currentPriceDisplay);
-                    Picasso.with(mContext).load(order.getImageUrl()).into(mProductDetailImage);
+                    Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mProductDetailImage);
                     mProductDetailImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
                     mLastPurchaseDate.setText(order.getDate());
                     mCurrentPriceDisplay.setText("$" + unitPrice);
@@ -186,7 +187,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             if(order.getTitle().length() > cutoff){
                 title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
             }
-            Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
+//            Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
         }
 
