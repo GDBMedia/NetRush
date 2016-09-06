@@ -358,7 +358,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 logout();
                 break;
             case R.id.sortByDateNewestToOldest:
-                 orders = sortByDateNewestToOldest(mOrders);
+                orders = sortByDateNewestToOldest(mOrders);
                 setAdapter(orders);
                 break;
             case R.id.sortByDateOldestToNewest:
@@ -397,9 +397,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onClick(View view) {
-        createCart();
-    }
+    public void onClick(View view) {createCart();}
 
     private void createCart() {
         Map<String, String> products = new HashMap<>();

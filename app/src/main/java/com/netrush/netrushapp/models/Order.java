@@ -56,6 +56,7 @@ public class Order {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
     public double getUnitprice() {
         return unitprice;
     }
