@@ -8,8 +8,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -32,12 +30,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
-import com.netrush.netrushapp.models.User;
 import com.netrush.netrushapp.services.AmazonService;
 
 import java.io.IOException;
@@ -60,7 +56,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
     public static ArrayList<String> mAsins = new ArrayList<>();
-    private static Button mCheckout;
+    private static Button mCheckoutButton;
     private static RecyclerView mRecyclerview;
     private static RelativeLayout.LayoutParams layoutparams;
     private String mUserId;
@@ -80,15 +76,14 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProductListActivity.this);
         mUserId = mSharedPreferences.getString("userId", null);
 
-        mCheckout = (Button) findViewById(R.id.checkoutButton);
+        mCheckoutButton = (Button) findViewById(R.id.checkout);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mCheckout.setOnClickListener(this);
+        mCheckoutButton.setOnClickListener(this);
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mOrderNum = "123456";
         checkIfExists();
-        setButtonVisibility();
         retrieveOrders();
     }
 
@@ -115,14 +110,50 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 });
     }
 
-    public static void setButtonVisibility(){
-        if(mAsins.size() == 0){
-            mCheckout.setVisibility(View.INVISIBLE);
+    public static void setButtonVisibility(int fadeType){
+        if(mAsins.size() == 0 && fadeType == 0){
+            Animation fadeOut = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
+            fadeOut.setAnimationListener(new Animation.AnimationListener(){
+
+                @Override
+                public void onAnimationStart(Animation animation){}
+
+                @Override
+                public void onAnimationRepeat(Animation animation){}
+
+                @Override
+                public void onAnimationEnd(Animation animation){
+                    mCheckoutButton.setVisibility(View.INVISIBLE);
+
+                }
+            });
+            mCheckoutButton.startAnimation(fadeOut);
             setRecyclerBottomMargin(0);
+
+        }else if(mAsins.size() == 1 && fadeType == 1) {
+
+            Animation fadeIn = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+            fadeIn.setAnimationListener(new Animation.AnimationListener(){
+
+                @Override
+                public void onAnimationStart(Animation animation){
+                    mCheckoutButton.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation){}
+
+                @Override
+                public void onAnimationEnd(Animation animation){
+
+                    setRecyclerBottomMargin(mCheckoutButton.getHeight());
+
+                }
+            });
+            mCheckoutButton.startAnimation(fadeIn);
+            mCheckoutButton.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
         }else {
-            setRecyclerBottomMargin(mCheckout.getHeight());
-            mCheckout.setVisibility(View.VISIBLE);
-            mCheckout.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
+            mCheckoutButton.setText(ProductListActivity.getContext().getString(R.string.checkout) + mAsins.size() + ")");
         }
     }
 
@@ -204,7 +235,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Order> sortByDateNewestToOldest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
-            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT);
+            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT_SOURCE);
             @Override public int compare(Order o1, Order o2) {
                 try {
                     return f.parse(o2.getDate()).compareTo(f.parse(o1.getDate()));
@@ -227,7 +258,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
     private ArrayList<Order> sortByDateOldestToNewest(ArrayList<Order> orders) {
         Collections.sort(orders, new Comparator<Order>() {
-            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT);
+            DateFormat f = new SimpleDateFormat(Constants.DATE_FORMAT_SOURCE);
             @Override public int compare(Order o1, Order o2) {
                 try {
                     return f.parse(o1.getDate()).compareTo(f.parse(o2.getDate()));

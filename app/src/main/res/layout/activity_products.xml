@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ProductListActivity"
-    android:animateLayoutChanges="true">
+    tools:context=".ui.ProductListActivity">
 
 
     <android.support.v7.widget.RecyclerView
@@ -13,10 +12,11 @@
         android:id="@+id/orders"
         />
 
+
     <Button
         android:text="Checkout"
         android:visibility="invisible"
-        android:id="@+id/checkoutButton"
+        android:id="@+id/checkout"
         android:background="@color/colorAccent"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
