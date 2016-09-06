@@ -88,7 +88,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mCheckoutButton.setOnClickListener(this);
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
-        mOrderNum = "123456";
+        mOrderNum = "103-1967714-9334646";
         checkIfExists();
         retrieveOrders();
     }
@@ -110,7 +110,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         } else{
                             double timeStamp = Double.valueOf(dataSnapshot.child("pushData").child("timeStamp").getValue().toString());
                             if(DateHelper.getDiffInDays(timeStamp) > 1){
-                                Toast.makeText(ProductListActivity.this, "Been More than 24 Hours updating", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductListActivity.this, R.string.timestamp_update, Toast.LENGTH_SHORT).show();
                                 getOrders();
                             }
                         }
@@ -238,6 +238,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                             Toast.makeText(ProductListActivity.this, R.string.save_failed, Toast.LENGTH_SHORT).show();
                         }else if(code == 1){
                             Toast.makeText(ProductListActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
+                        }else if(code == 4){
+                            Toast.makeText(ProductListActivity.this, R.string.no_purchase, Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(ProductListActivity.this, R.string.no_update, Toast.LENGTH_SHORT).show();
                         }

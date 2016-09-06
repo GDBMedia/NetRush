@@ -42,6 +42,8 @@
     <string name="no_update">No Updated needed</string>
     <string name="checkout">Checkout(</string>
     <string name="today">Today</string>
+    <string name="timestamp_update">Been More than 24 Hours updating</string>
+    <string name="no_purchase">No Purchases from NetRush</string>
 
     <integer name="swing_anim_time">1000</integer>
 

@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,6 +175,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             if(order.getTitle().length() > cutoff){
                 title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
             }
+            Log.d(TAG, "bindOrder: " + order.getImageWidth());
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
         }
