@@ -21,7 +21,8 @@ import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
 import com.netrush.netrushapp.ui.ProductListActivity;
-import com.netrush.netrushapp.utils.DateFormatter;
+import com.netrush.netrushapp.utils.DateHelper;
+import com.netrush.netrushapp.utils.MarginHelpers;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import butterknife.Bind;
@@ -136,18 +137,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             switch (mViewType){
                 case TYPE_FULL:
                     mFullCardCount++;
-                    setFullCard(itemPosition);
+//                    setFullCard(itemPosition);
                     cutoff = 35;
                     break;
                 case TYPE_HALF:
-                    int visualitemPosition = itemPosition+ mFullCardCount;
-                    setHalfCard(visualitemPosition);
+//                    int visualitemPosition = itemPosition+ mFullCardCount;
+//                    setHalfCard(visualitemPosition);
                     cutoff = 20;
                     break;
                 default:
                     cutoff = 20;
                     break;
             }
+            cv.setLayoutParams(MarginHelpers.setMarginOfStaggeredCards(layoutParams,mViewType,itemPosition,mFullCardCount,mOrderArrayList.size(),itemMargin));
             cv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -178,56 +180,56 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
             Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
-            mdate.setText(mContext.getString(R.string.last_ordered) + DateFormatter.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
+            mdate.setText(mContext.getString(R.string.last_ordered) + DateHelper.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
         }
 
-        private void setHalfCard(int visualitemPosition) {
-            if(visualitemPosition%2 == 0){
-                setLeftCard(visualitemPosition);
-            }else{
-                setRightCard(visualitemPosition);
-            }
-        }
-
-        private void setFullCard(int itemPosition) {
-            if (itemPosition == 0){
-                layoutParams.setMargins(itemMargin, itemMargin, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }else if(itemPosition == mOrderArrayList.size()-1){
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMargin);
-                cv.setLayoutParams(layoutParams);
-            }else{
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }
-        }
-
-        private void setRightCard(int itemPosition) {
-            if(itemPosition == 0){
-                layoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
-                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMargin);
-                cv.setLayoutParams(layoutParams);
-            }else{
-                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }
-        }
-
-        private void setLeftCard(int itemPosition) {
-            if(itemPosition == 0){
-                layoutParams.setMargins(itemMargin, itemMargin, itemMarginHalf, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMargin);
-                cv.setLayoutParams(layoutParams);
-            }else{
-                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMarginHalf);
-                cv.setLayoutParams(layoutParams);
-            }
-
-        }
+//        private void setHalfCard(int visualitemPosition) {
+//            if(visualitemPosition%2 == 0){
+//                setLeftCard(visualitemPosition);
+//            }else{
+//                setRightCard(visualitemPosition);
+//            }
+//        }
+//
+//        private void setFullCard(int itemPosition) {
+//            if (itemPosition == 0){
+//                layoutParams.setMargins(itemMargin, itemMargin, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }else if(itemPosition == mOrderArrayList.size()-1){
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMargin);
+//                cv.setLayoutParams(layoutParams);
+//            }else{
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }
+//        }
+//
+//        private void setRightCard(int itemPosition) {
+//            if(itemPosition == 0){
+//                layoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
+//                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMargin);
+//                cv.setLayoutParams(layoutParams);
+//            }else{
+//                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }
+//        }
+//
+//        private void setLeftCard(int itemPosition) {
+//            if(itemPosition == 0){
+//                layoutParams.setMargins(itemMargin, itemMargin, itemMarginHalf, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMargin);
+//                cv.setLayoutParams(layoutParams);
+//            }else{
+//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMarginHalf);
+//                cv.setLayoutParams(layoutParams);
+//            }
+//
+//        }
 
         private void setUnClicked() {
             ProductListActivity.setButtonVisibility(0);

@@ -35,6 +35,10 @@ import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.models.Order;
 import com.netrush.netrushapp.services.AmazonService;
+import com.netrush.netrushapp.utils.DateHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -43,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,8 +103,15 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Log.d(TAG, "onDataChange: " + dataSnapshot.getValue());
+
                         if(dataSnapshot.getValue() == null){
                             getOrders();
+                        } else{
+                            double timeStamp = Double.valueOf(dataSnapshot.child("pushData").child("timeStamp").getValue().toString());
+                            if(DateHelper.getDiffInDays(timeStamp) > 1){
+                                Toast.makeText(ProductListActivity.this, "Been More than 24 Hours updating", Toast.LENGTH_SHORT).show();
+                                getOrders();
+                            }
                         }
                     }
 
@@ -163,7 +175,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void retrieveOrders() {
-        Query query = FirebaseDatabase.getInstance().getReference("users/" + mUserId +"/data");
+        Query query = FirebaseDatabase.getInstance().getReference("users/" + mUserId +"/pushData/data");
         mChildEventListener = query.addChildEventListener(new ChildEventListener() {
 
             @Override

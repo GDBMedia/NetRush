@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by Garrett on 9/2/2016.
  */
-public class DateFormatter {
+public class DateHelper {
     public static String formatDate(String date, String source, Context context){
         String formattedDate = date;
         try{
@@ -43,5 +43,13 @@ public class DateFormatter {
         }
 
         return formattedDate;
+    }
+
+    public static double getDiffInDays(double timeStamp){
+        Date date = new Date();
+        long currenttime = date.getTime();
+        double diff = currenttime - timeStamp;
+        double diff_in_days =  (diff / (24*60*60*10*10*10));
+        return diff_in_days;
     }
 }
