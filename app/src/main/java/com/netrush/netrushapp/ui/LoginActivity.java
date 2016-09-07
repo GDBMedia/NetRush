@@ -1,10 +1,8 @@
 package com.netrush.netrushapp.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -20,17 +18,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
+import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
-import com.netrush.netrushapp.models.User;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -84,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (user != null) {
                     mAuthProgressDialog.show();
 
-                    mEditor.putString("userId", user.getUid()).apply();
+                    mEditor.putString(Constants.USER_ID_REF, user.getUid()).apply();
 
                     Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -116,11 +106,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         if (email.equals("")) {
-            mEmail.setError("Please enter your email");
+            mEmail.setError(getString(R.string.blank_email));
             return;
         }
         if (password.equals("")) {
-            mPassword.setError("Password cannot be blank");
+            mPassword.setError(getString(R.string.blank_password));
             return;
         }
 
@@ -142,8 +132,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void createAuthProgressDialog() {
         mAuthProgressDialog = new ProgressDialog(this);
-        mAuthProgressDialog.setTitle("Loading...");
-        mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+        mAuthProgressDialog.setTitle(getString(R.string.loading));
+        mAuthProgressDialog.setMessage(getString(R.string.auth_firebase));
         mAuthProgressDialog.setCancelable(false);
     }
 

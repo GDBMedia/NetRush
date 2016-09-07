@@ -1,5 +1,6 @@
 package com.netrush.netrushapp.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,14 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -40,9 +38,6 @@ import com.netrush.netrushapp.models.Order;
 import com.netrush.netrushapp.services.AmazonService;
 import com.netrush.netrushapp.utils.DateHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -50,7 +45,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -61,6 +55,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class ProductListActivity extends AppCompatActivity implements View.OnClickListener{
+
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrders = new ArrayList<>();
     private OrderAdapter mAdapter;
@@ -74,6 +69,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private ChildEventListener mChildEventListener;
     private String mOrderNum;
     private static Context mContext;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +79,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         ButterKnife.bind(this);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ProductListActivity.this);
-        mUserId = mSharedPreferences.getString("userId", null);
+        mUserId = mSharedPreferences.getString(Constants.USER_ID_REF, null);
 
         mCheckoutButton = (Button) findViewById(R.id.checkout);
         mRecyclerview = (RecyclerView) findViewById(R.id.orders);
@@ -92,8 +88,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         layoutparams = (RelativeLayout.LayoutParams)mRecyclerview.getLayoutParams();
         mRecyclerview.setHasFixedSize(true);
         mOrderNum = "103-1967714-9334646";
+        createProgressDialog();
         checkIfExists();
-        retrieveOrders();
+
     }
 
     public static Context getContext(){
@@ -101,7 +98,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void checkIfExists() {
-        Query query = FirebaseDatabase.getInstance().getReference("users/" + mUserId);
+        progressDialog.show();
+        Query query = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF + mUserId);
         query.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -111,10 +109,12 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                         if(dataSnapshot.getValue() == null){
                             getOrders();
                         } else{
-                            double timeStamp = Double.valueOf(dataSnapshot.child("pushData").child("timeStamp").getValue().toString());
+                            double timeStamp = Double.valueOf(dataSnapshot.child(Constants.PUSH_DATA_CHILD).child(Constants.TIME_STAMP_CHILD).getValue().toString());
                             if(DateHelper.getDiffInDays(timeStamp) > 1){
                                 Toast.makeText(ProductListActivity.this, R.string.timestamp_update, Toast.LENGTH_SHORT).show();
                                 getOrders();
+                            }else{
+                                retrieveOrders();
                             }
                         }
                     }
@@ -178,13 +178,21 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         mRecyclerview.setLayoutParams(layoutparams);
     }
 
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Loading Orders From Firebase...");
+        progressDialog.setCancelable(false);
+    }
+
     private void retrieveOrders() {
-        Query query = FirebaseDatabase.getInstance().getReference("users/" + mUserId +"/pushData/data");
+        Query query = FirebaseDatabase.getInstance().getReference(Constants.USERS_REF + mUserId + Constants.ORDER_DATA_REF);
         mChildEventListener = query.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d("onChildAdded: " ,dataSnapshot.getValue().toString());
+                progressDialog.dismiss();
                 mOrders.add(dataSnapshot.getValue(Order.class));
                 ArrayList<Order> orders = sortByMostPurchased(mOrders);
                 setAdapter(orders);
@@ -429,6 +437,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 startActivity(i);
             }
         });
+    }
+    public void showMessage(final String message) {
+        Toast.makeText(ProductListActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }
 

@@ -2,6 +2,7 @@ package com.netrush.netrushapp.utils;
 
 import android.widget.LinearLayout;
 
+import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.adapters.OrderAdapter;
 import com.netrush.netrushapp.ui.ProductListActivity;
@@ -13,8 +14,6 @@ import com.squareup.picasso.Picasso;
 
 
 public class MarginHelpers {
-    private static final int TYPE_FULL = 0;
-    private static final int TYPE_HALF = 1;
     private static int itemMargin;
     private static int itemMarginHalf;
     private static int mArraySize;
@@ -29,9 +28,9 @@ public class MarginHelpers {
         itemMarginHalf = margin/2;
         mFullCardCount = fullCardCount;
         switch (type){
-            case TYPE_FULL:
+            case Constants.TYPE_FULL:
                 return setFullCard(itemPosistion);
-            case TYPE_HALF:
+            case Constants.TYPE_HALF:
                 int visualItemPosition = itemPosistion + fullCardCount;
                 return setHalfCard(visualItemPosition);
         }

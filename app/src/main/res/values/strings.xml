@@ -44,6 +44,15 @@
     <string name="today">Today</string>
     <string name="timestamp_update">Been More than 24 Hours updating</string>
     <string name="no_purchase">No Purchases from NetRush</string>
+    <string name="dollar">$</string>
+    <string name="auth_firebase">Authenticating with Firebase...</string>
+    <string name="loading">Loading...</string>
+    <string name="invalid_email">Please enter a valid email address</string>
+    <string name="invalid_name">Please enter your name</string>
+    <string name="invalid_pass_length">Please create a password containing at least 6 characters</string>
+    <string name="pass_not_match">Passwords do not match</string>
+    <string name="blank_email">Please enter your email</string>
+    <string name="blank_password">Password cannot be blank</string>
 
     <integer name="swing_anim_time">1000</integer>
 

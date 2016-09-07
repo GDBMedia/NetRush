@@ -3,6 +3,7 @@ package com.netrush.netrushapp.ui;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 
 import android.app.ProgressDialog;
@@ -103,8 +104,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
     private void createAuthProgressDialog() {
         mAuthProgressDialog = new ProgressDialog(this);
-        mAuthProgressDialog.setTitle("Loading...");
-        mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+        mAuthProgressDialog.setTitle(getString(R.string.loading));
+        mAuthProgressDialog.setMessage(getString(R.string.auth_firebase));
         mAuthProgressDialog.setCancelable(true);
     }
 
@@ -143,7 +144,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
 
-                    mEditor.putString("userId", user.getUid()).apply();
+                    mEditor.putString(Constants.USER_ID_REF, user.getUid()).apply();
 
                     Intent intent = new Intent(SignUpActivity.this, ProductListActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -178,7 +179,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
         if (!isGoodEmail) {
             mEmailEditText.requestFocus();
-            mEmailEditText.setError("Please enter a valid email address");
+            mEmailEditText.setError(getString(R.string.invalid_email));
             return false;
         }
         return isGoodEmail;
@@ -187,7 +188,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private boolean isValidName(String name) {
         if (name.equals("")) {
             mNameEditText.requestFocus();
-            mNameEditText.setError("Please enter your name");
+            mNameEditText.setError(getString(R.string.invalid_name));
             return false;
         }
         return true;
@@ -196,12 +197,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private boolean isValidPassword(String password, String confirmPassword) {
         if (password.length() < 6) {
             mPasswordEditText.requestFocus();
-            mPasswordEditText.setError("Please create a password containing at least 6 characters");
+            mPasswordEditText.setError(getString(R.string.invalid_pass_length));
 
             return false;
         } else if (!password.equals(confirmPassword)) {
             mPasswordEditText.requestFocus();
-            mPasswordEditText.setError("Passwords do not match");
+            mPasswordEditText.setError(getString(R.string.pass_not_match));
             return false;
         }
         return true;
