@@ -11,16 +11,18 @@ public class Order {
     private String quantity;
     private double unitprice;
     private String imageUrl;
+    private int imageWidth;
 
     public Order() {}
 
-    public Order(String date, String title, String asin, String quantity, double unitprice, String imageUrl) {
+    public Order(String date, String title, String asin, String quantity, double unitprice, String imageUrl, int imageWidth) {
         this.date = date;
         this.title = title;
         this.asin = asin;
         this.quantity = quantity;
         this.unitprice = unitprice;
         this.imageUrl = imageUrl;
+        this.imageWidth = imageWidth;
     }
 
     public String getDate() {
@@ -70,4 +72,11 @@ public class Order {
         this.imageUrl = imageUrl;
     }
 
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+    }
 }

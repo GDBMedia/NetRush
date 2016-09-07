@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,13 +140,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 case TYPE_FULL:
                     mFullCardCount++;
                     Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mImage);
-//                    setFullCard(itemPosition);
                     cutoff = 35;
                     break;
                 case TYPE_HALF:
                     Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
-//                    int visualitemPosition = itemPosition+ mFullCardCount;
-//                    setHalfCard(visualitemPosition);
                     cutoff = 20;
                     break;
                 default:
@@ -185,64 +183,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             if(ProductListActivity.mAsins.contains(mOrderArrayList.get(itemPosition).getAsin())){
                 setClicked();
             }
-//            else{
-//                setUnClicked();
-//            }
             String title = order.getTitle();
             if(order.getTitle().length() > cutoff){
                 title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
             }
-//            Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
             mTitle.setText(title);
         }
-
-//        private void setHalfCard(int visualitemPosition) {
-//            if(visualitemPosition%2 == 0){
-//                setLeftCard(visualitemPosition);
-//            }else{
-//                setRightCard(visualitemPosition);
-//            }
-//        }
-//
-//        private void setFullCard(int itemPosition) {
-//            if (itemPosition == 0){
-//                layoutParams.setMargins(itemMargin, itemMargin, itemMargin, itemMarginHalf);
-//                cv.setLayoutParams(layoutParams);
-//            }else if(itemPosition == mOrderArrayList.size()-1){
-//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMargin);
-//                cv.setLayoutParams(layoutParams);
-//            }else{
-//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMargin, itemMarginHalf);
-//                cv.setLayoutParams(layoutParams);
-//            }
-//        }
-//
-//        private void setRightCard(int itemPosition) {
-//            if(itemPosition == 0){
-//                layoutParams.setMargins(itemMarginHalf, itemMargin, itemMargin, itemMarginHalf);
-//                cv.setLayoutParams(layoutParams);
-//            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
-//                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMargin);
-//                cv.setLayoutParams(layoutParams);
-//            }else{
-//                layoutParams.setMargins(itemMarginHalf, itemMarginHalf, itemMargin, itemMarginHalf);
-//                cv.setLayoutParams(layoutParams);
-//            }
-//        }
-//
-//        private void setLeftCard(int itemPosition) {
-//            if(itemPosition == 0){
-//                layoutParams.setMargins(itemMargin, itemMargin, itemMarginHalf, itemMarginHalf);
-//                cv.setLayoutParams(layoutParams);
-//            }else if(itemPosition == mOrderArrayList.size()+ mFullCardCount -1){
-//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMargin);
-//                cv.setLayoutParams(layoutParams);
-//            }else{
-//                layoutParams.setMargins(itemMargin, itemMarginHalf, itemMarginHalf, itemMarginHalf);
-//                cv.setLayoutParams(layoutParams);
-//            }
-//
-//        }
 
         private void setUnClicked() {
             ProductListActivity.setButtonVisibility(0);
