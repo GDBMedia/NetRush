@@ -163,7 +163,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     mCurrentPriceDisplay = (TextView) productDetails.findViewById(R.id.currentPriceDisplay);
                     Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mProductDetailImage);
                     mProductDetailImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
-                    mLastPurchaseDate.setText(order.getDate());
+                    mLastPurchaseDate.setText(DateHelper.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
                     mCurrentPriceDisplay.setText("$" + unitPrice);
 
                     alert.setView(productDetails);
