@@ -2,6 +2,7 @@ package com.netrush.netrushapp.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -153,6 +154,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             cv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(150);
+
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     final View productDetails = inflater.inflate(R.layout.product_details, null);
                     final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
@@ -168,6 +172,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
                     alert.setView(productDetails);
                     alert.setCancelable(true);
+                    
                     final AlertDialog dialog = alert.create();
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
