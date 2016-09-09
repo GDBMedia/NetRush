@@ -1,5 +1,6 @@
 package com.netrush.netrushapp.services;
 
+import android.nfc.Tag;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -47,12 +48,12 @@ public class AmazonService {
         call.enqueue(callback);
     }
 
-    public static int proccssResult(Response response){
+    public static int processResult(Response response){
         int code = 1;
         try {
 
             String jsonData = response.body().string();
-            Log.d(TAG, "proccssResult: " + jsonData);
+            Log.d(TAG, "processResult: " + jsonData);
             if (response.isSuccessful()) {
                 JSONObject statusObj = new JSONObject(jsonData);
                 code = statusObj.getInt("code");
@@ -105,12 +106,13 @@ public class AmazonService {
 
     }
 
-    public static String proccessCart(Response response, int type){
+    public static String processCart(Response response, int type){
         String purchaseUrl= "";
 
         try {
             String xmldata = response.body().string();
             JSONObject xmlJSONObj = XML.toJSONObject(xmldata);
+            Log.d(TAG, xmlJSONObj.toString());
             JSONObject cartObj = xmlJSONObj.getJSONObject("CartCreateResponse").getJSONObject("Cart");
             purchaseUrl = cartObj.getString("PurchaseURL");
             Log.v("Cart", cartObj.toString());
@@ -154,8 +156,4 @@ public class AmazonService {
         call.enqueue(callback);
 
     }
-
-
-
-
 }

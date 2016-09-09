@@ -22,7 +22,6 @@ public class Constants {
     public static final String ORDER_NUMQ = "orderNum";
     public static final String DATE_FORMAT_OUTPUT = "MMMM d";
     public static final String DATE_FORMAT_OUTPUT_YEAR = "MMMM d, yyyy";
-    public static final String DOLLAR = "$";
     public static final String PUSH_DATA_CHILD = "pushData";
     public static final String TIME_STAMP_CHILD = "timeStamp";
     public static final String ORDER_DATA_REF = "/pushData/data";
@@ -32,7 +31,6 @@ public class Constants {
     public static final String DASH = "-";
     public static final String BLANK_SPACE = "";
 
-
     public static final int VIBRATOR_LENGTH = 60;
     public static final int TARGET_WIDTH = 900;
     public static final int TARGET_HEIGHT = 875;
@@ -40,6 +38,7 @@ public class Constants {
     public static final int TYPE_HALF = 1;
     public static final int LONG_CUTOFF = 37;
     public static final int SHORT_CUTOFF = 15;
+    public static final int PRODUCT_DETAIL_TITLE_CUTOFF = 36;
     public static final int FADE_OUT_TYPE = 0;
     public static final int FADE_IN_TYPE = 1;
     public static final int ZERO = 0;

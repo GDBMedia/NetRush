@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -36,7 +35,6 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -312,7 +310,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onResponse(Call call, Response response){
-                final int code = amazonService.proccssResult(response);
+                final int code = amazonService.processResult(response);
                 ProductListActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -538,7 +536,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String purchaseUrl = amazonService.proccessCart(response, 1);
+                String purchaseUrl = amazonService.processCart(response, 1);
                 Log.d(TAG, "CreateCart: " + purchaseUrl);
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(purchaseUrl));

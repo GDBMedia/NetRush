@@ -120,6 +120,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         private ImageView mProductDetailImage;
         private TextView mLastPurchaseDate;
         private TextView mCurrentPriceDisplay;
+        private TextView mProductDetailTitle;
         private final int itemMargin;
         private LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -168,10 +169,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     mProductDetailImage = (ImageView) productDetails.findViewById(R.id.productDetailImage);
                     mLastPurchaseDate = (TextView) productDetails.findViewById(R.id.lastPurchasedDateDisplay);
                     mCurrentPriceDisplay = (TextView) productDetails.findViewById(R.id.currentPriceDisplay);
+                    mProductDetailTitle = (TextView) productDetails.findViewById(R.id.productDetailTitle);
                     Picasso.with(mContext).load(order.getImageUrl()).resize(Constants.TARGET_WIDTH, Constants.TARGET_HEIGHT).centerInside().into(mProductDetailImage);
                     mProductDetailImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
                     mLastPurchaseDate.setText(DateHelper.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
                     mCurrentPriceDisplay.setText(mContext.getString(R.string.dollar) + unitPrice);
+
+                    String shortenedProductTitle = order.getTitle().substring(Constants.ZERO, Constants.PRODUCT_DETAIL_TITLE_CUTOFF) + mContext.getString(R.string.elip);
+                    if (order.getTitle().length() > Constants.PRODUCT_DETAIL_TITLE_CUTOFF) {
+                        mProductDetailTitle.setText(shortenedProductTitle);
+                    } else {
+                        mProductDetailTitle.setText(order.getTitle());
+                    }
+
 
                     alert.setView(productDetails);
                     alert.setCancelable(true);
