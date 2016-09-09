@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amazon.device.iap.PurchasingService;
+import com.amazon.device.iap.model.RequestId;
 import com.netrush.netrushapp.Constants;
 import com.netrush.netrushapp.R;
 import com.netrush.netrushapp.models.Order;
@@ -37,13 +39,13 @@ import butterknife.ButterKnife;
  * Created by Garrett on 8/17/2016.
  */
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
+
     public final String TAG = this.getClass().getSimpleName();
     private ArrayList<Order> mOrderArrayList = new ArrayList<>();
     private Context mContext;
-    private static final int TYPE_FULL = 0;
-    private static final int TYPE_HALF = 1;
+
     private int mLastPosition = -1;
-    private int mFullCardCount = 0;
+    private int mFullCardCount = Constants.ZERO;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         mContext = context;
@@ -61,10 +63,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
                     StaggeredGridLayoutManager.LayoutParams sglp = (StaggeredGridLayoutManager.LayoutParams) lp;
                     switch (type) {
-                        case TYPE_FULL:
+                        case Constants.TYPE_FULL:
                             sglp.setFullSpan(true);
                             break;
-                        case TYPE_HALF:
+                        case Constants.TYPE_HALF:
                             sglp.setFullSpan(false);
                             sglp.width = view.getWidth();
                             break;
@@ -100,9 +102,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public int getItemViewType(int position) {
         Order order = mOrderArrayList.get(position);
         if(Integer.valueOf(order.getQuantity()) > 3){
-            return TYPE_FULL;
+            return Constants.TYPE_FULL;
         }
-        return TYPE_HALF;
+        return Constants.TYPE_HALF;
     }
 
     @Override
@@ -111,6 +113,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
         @Bind(R.id.card_view) CardView cv;
         @Bind(R.id.titleTextView) TextView mTitle;
         @Bind(R.id.productimg) ImageView mImage;
@@ -137,17 +140,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             int cutoff;
 
             switch (mViewType){
-                case TYPE_FULL:
+                case Constants.TYPE_FULL:
                     mFullCardCount++;
-                    Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mImage);
-                    cutoff = 35;
+                    Picasso.with(mContext).load(order.getImageUrl()).resize(Constants.TARGET_WIDTH, Constants.TARGET_HEIGHT).centerInside().into(mImage);
+                    cutoff = Constants.LONG_CUTOFF;
                     break;
-                case TYPE_HALF:
+                case Constants.TYPE_HALF:
                     Picasso.with(mContext).load(order.getImageUrl()).into(mImage);
-                    cutoff = 20;
+                    cutoff = Constants.SHORT_CUTOFF;
                     break;
                 default:
-                    cutoff = 20;
+                    cutoff = Constants.SHORT_CUTOFF;
                     break;
             }
             cv.setLayoutParams(MarginHelpers.setMarginOfStaggeredCards(layoutParams,mViewType,itemPosition,mFullCardCount,mOrderArrayList.size(),itemMargin));
@@ -165,10 +168,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     mProductDetailImage = (ImageView) productDetails.findViewById(R.id.productDetailImage);
                     mLastPurchaseDate = (TextView) productDetails.findViewById(R.id.lastPurchasedDateDisplay);
                     mCurrentPriceDisplay = (TextView) productDetails.findViewById(R.id.currentPriceDisplay);
-                    Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mProductDetailImage);
+                    Picasso.with(mContext).load(order.getImageUrl()).resize(Constants.TARGET_WIDTH, Constants.TARGET_HEIGHT).centerInside().into(mProductDetailImage);
                     mProductDetailImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
                     mLastPurchaseDate.setText(DateHelper.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
-                    mCurrentPriceDisplay.setText(Constants.DOLLAR + unitPrice);
+                    mCurrentPriceDisplay.setText(mContext.getString(R.string.dollar) + unitPrice);
 
                     alert.setView(productDetails);
                     alert.setCancelable(true);
@@ -185,19 +188,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
             String title = order.getTitle();
             if(order.getTitle().length() > cutoff){
-                title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
+                title = order.getTitle().substring(Constants.ZERO, cutoff) + mContext.getString(R.string.elip);
             }
             mTitle.setText(title);
         }
 
         private void setUnClicked() {
-            ProductListActivity.setButtonVisibility(0);
+            ProductListActivity.setButtonVisibility(Constants.FADE_OUT_TYPE);
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
 
         private void setClicked() {
-            ProductListActivity.setButtonVisibility(1);
+            ProductListActivity.setButtonVisibility(Constants.FADE_IN_TYPE);
             mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));

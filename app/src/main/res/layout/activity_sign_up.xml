@@ -28,7 +28,7 @@ android:background="@color/colorPrimary">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name"
-            android:inputType="textPersonName"
+            android:inputType="textCapSentences"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@color/primary_light"
@@ -92,7 +92,8 @@ android:background="@color/colorPrimary">
             android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="@color/primary_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:imeOptions="actionGo"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button

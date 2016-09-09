@@ -23,7 +23,24 @@ public class Constants {
     public static final String DATE_FORMAT_OUTPUT = "MMMM d";
     public static final String DATE_FORMAT_OUTPUT_YEAR = "MMMM d, yyyy";
     public static final String DOLLAR = "$";
-    public static final int VIBRATOR_LENGTH = 75;
+    public static final String PUSH_DATA_CHILD = "pushData";
+    public static final String TIME_STAMP_CHILD = "timeStamp";
+    public static final String ORDER_DATA_REF = "/pushData/data";
+    public static final String USERS_REF = "users/";
+    public static final String USER_ID_REF = "userId";
+    public static final String ORDER_NUM_CHILD = "orderNum";
+    public static final String DASH = "-";
+    public static final String BLANK_SPACE = "";
 
 
+    public static final int VIBRATOR_LENGTH = 60;
+    public static final int TARGET_WIDTH = 900;
+    public static final int TARGET_HEIGHT = 875;
+    public static final int TYPE_FULL = 0;
+    public static final int TYPE_HALF = 1;
+    public static final int LONG_CUTOFF = 37;
+    public static final int SHORT_CUTOFF = 15;
+    public static final int FADE_OUT_TYPE = 0;
+    public static final int FADE_IN_TYPE = 1;
+    public static final int ZERO = 0;
 }
