@@ -113,6 +113,7 @@ public class AmazonService {
             JSONObject xmlJSONObj = XML.toJSONObject(xmldata);
             JSONObject cartObj = xmlJSONObj.getJSONObject("CartCreateResponse").getJSONObject("Cart");
             purchaseUrl = cartObj.getString("PurchaseURL");
+            Log.v("Cart", cartObj.toString());
         } catch (JSONException je) {
             System.out.println(je.toString());
         } catch (IOException e) {

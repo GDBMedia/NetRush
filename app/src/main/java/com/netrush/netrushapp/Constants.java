@@ -22,6 +22,8 @@ public class Constants {
     public static final String ORDER_NUMQ = "orderNum";
     public static final String DATE_FORMAT_OUTPUT = "MMMM d";
     public static final String DATE_FORMAT_OUTPUT_YEAR = "MMMM d, yyyy";
+    public static final String DOLLAR = "$";
+    public static final int VIBRATOR_LENGTH = 75;
 
 
 }

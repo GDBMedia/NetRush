@@ -155,7 +155,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 @Override
                 public boolean onLongClick(View view) {
                     Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-                    v.vibrate(150);
+                    v.vibrate(Constants.VIBRATOR_LENGTH);
 
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     final View productDetails = inflater.inflate(R.layout.product_details, null);
@@ -168,7 +168,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     Picasso.with(mContext).load(order.getImageUrl()).resize(900, 875).centerInside().into(mProductDetailImage);
                     mProductDetailImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
                     mLastPurchaseDate.setText(DateHelper.formatDate(order.getDate(), Constants.DATE_FORMAT_SOURCE, mContext));
-                    mCurrentPriceDisplay.setText("$" + unitPrice);
+                    mCurrentPriceDisplay.setText(Constants.DOLLAR + unitPrice);
 
                     alert.setView(productDetails);
                     alert.setCancelable(true);
