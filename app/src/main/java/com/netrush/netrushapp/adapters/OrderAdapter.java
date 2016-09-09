@@ -45,7 +45,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     private Context mContext;
 
     private int mLastPosition = -1;
-    private int mFullCardCount = 0;
+    private int mFullCardCount = Constants.ZERO;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         mContext = context;
@@ -188,19 +188,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
             String title = order.getTitle();
             if(order.getTitle().length() > cutoff){
-                title = order.getTitle().substring(0, cutoff) + mContext.getString(R.string.elip);
+                title = order.getTitle().substring(Constants.ZERO, cutoff) + mContext.getString(R.string.elip);
             }
             mTitle.setText(title);
         }
 
         private void setUnClicked() {
-            ProductListActivity.setButtonVisibility(0);
+            ProductListActivity.setButtonVisibility(Constants.FADE_OUT_TYPE);
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
 
         private void setClicked() {
-            ProductListActivity.setButtonVisibility(1);
+            ProductListActivity.setButtonVisibility(Constants.FADE_IN_TYPE);
             mImage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));
             cv.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_dark_background));
             mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.cardview_light_background));

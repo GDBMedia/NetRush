@@ -23,6 +23,7 @@
         </service>
         <activity
             android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,9 +31,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ProductListActivity" />
+        <activity android:name=".ui.ProductListActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.SignUpActivity"
-            android:theme="@style/LoginTheme">
+            android:theme="@style/LoginTheme"
+            android:screenOrientation="portrait">
 
         </activity>
     </application>

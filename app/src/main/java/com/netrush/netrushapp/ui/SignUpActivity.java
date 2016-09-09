@@ -15,7 +15,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -78,6 +80,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         mLoginTextView.setOnClickListener(this);
         mCreateUserButton.setOnClickListener(this);
+        mConfirmPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    createNewUser();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mEditor = mSharedPreferences.edit();
@@ -145,7 +158,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 if (user != null) {
 
                     mEditor.putString(Constants.USER_ID_REF, user.getUid()).apply();
-
+                    mAuthProgressDialog.dismiss();
                     Intent intent = new Intent(SignUpActivity.this, ProductListActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

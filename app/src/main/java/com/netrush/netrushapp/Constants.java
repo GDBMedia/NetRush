@@ -27,6 +27,9 @@ public class Constants {
     public static final String ORDER_DATA_REF = "/pushData/data";
     public static final String USERS_REF = "users/";
     public static final String USER_ID_REF = "userId";
+    public static final String ORDER_NUM_CHILD = "orderNum";
+    public static final String DASH = "-";
+    public static final String BLANK_SPACE = "";
 
 
     public static final int VIBRATOR_LENGTH = 60;
@@ -36,7 +39,7 @@ public class Constants {
     public static final int TYPE_HALF = 1;
     public static final int LONG_CUTOFF = 37;
     public static final int SHORT_CUTOFF = 15;
-
-
-
+    public static final int FADE_OUT_TYPE = 0;
+    public static final int FADE_IN_TYPE = 1;
+    public static final int ZERO = 0;
 }

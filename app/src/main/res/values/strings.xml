@@ -39,7 +39,7 @@
     <string name="sort_by_most_purchased">Sort By Most Purchased</string>
     <string name="save_failed">Save failed. :(</string>
     <string name="save_success">Save success!</string>
-    <string name="no_update">No Updated needed</string>
+    <string name="no_update">No Update needed</string>
     <string name="checkout">Checkout(</string>
     <string name="today">Today</string>
     <string name="timestamp_update">Been More than 24 Hours updating</string>
@@ -53,6 +53,15 @@
     <string name="pass_not_match">Passwords do not match</string>
     <string name="blank_email">Please enter your email</string>
     <string name="blank_password">Password cannot be blank</string>
+    <string name="enter_order_number">Enter Order Number</string>
+    <string name="order_number">Order Number</string>
+    <string name="confirm">Confirm</string>
+    <string name="check_order_num">Check Order Number</string>
+    <string name="nopurchase_message">You either haven\'t made purchases from NetRush or you have entered your Order Number incorrectly. If you feel you have made purchases from NetRush please press Continue to re-enter your Order Number. If you have not made purchases then please press Cancel to leave the app</string>
+    <string name="nopurchase_title">No Purchases or Incorrect Order Number</string>
+    <string name="cancel">Cancel</string>
+    <string name="continueString">Continue</string>
+    <string name="loading_orders">Loading Orders From Firebase...</string>
 
     <integer name="swing_anim_time">1000</integer>
 
